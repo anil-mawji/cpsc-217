@@ -7,7 +7,7 @@ while True:
         age = float(input("Enter your age:\n"))
         dogAge = 0
         # Add 10.5 years to dogAge a maximum of two times
-        for i in range(0, 2):
+        for i in range(2):
             if age - 1 >= 0:
                 dogAge = dogAge + 10.5
                 age = age - 1
