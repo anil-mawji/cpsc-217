@@ -11,6 +11,7 @@ def get_dog_years(years):
     if years <= 2:
         # First two dog years are equivalent to 10.5 human years
         return years * 10.5
+    dog_years = 0
     # Add 10.5 years to dog_years a maximum of two times
     for i in range(2):
         if years - 1 >= 0:
