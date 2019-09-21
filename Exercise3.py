@@ -17,7 +17,7 @@ def get_dog_years(years):
             dog_years = dog_years + 10.5
             years = years - 1
         else:
-            # Age is age is too small to keep adding
+            # Age is too small to keep adding
             break
     # Add 4 years for every remaining year
     return dog_years + years * 4
