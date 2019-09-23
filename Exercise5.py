@@ -1,5 +1,5 @@
 ##
-# CPSC 217 Exercise 1: Human Years and Dog Years
+# CPSC 217 Exercise 5: Forward and Backward
 # Copyright (C) 2019 Anil Mawji
 
 value, tab = None, []

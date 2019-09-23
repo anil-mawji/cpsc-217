@@ -1,5 +1,5 @@
 ##
-# CPSC 217 Exercise 1: Human Years and Dog Years
+# CPSC 217 Exercise 6: Where Are You?
 # Copyright (C) 2019 Anil Mawji
 
 from SimpleGraphics import *
