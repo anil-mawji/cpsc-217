@@ -10,7 +10,8 @@ while True:
             # Ask user for age again
             continue
         # Display result
-        print("Holy moly,", name, "is", age, "years old! That's", age*7, "years old in dog years!")
+        print("Holy moly, %s is %f years old! That's %f in dog years!" % (name, age, age*7))
         break
     except ValueError:
+        # Ask user for age if input was not a number
         pass
