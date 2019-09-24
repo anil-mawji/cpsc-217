@@ -1,19 +1,18 @@
-##
-# CPSC 217 Exercise 6: Where Are You?
-# Copyright (C) 2019 Anil Mawji
+PROVINCE_LETTERS = {
+    "Alberta": "T",
+    "British Columbia": "V",
+    "Manitoba": "R",
+    "New Brunswick": "E",
+    "Newfoundland": "A",
+    "Nova Scotia": "B",
+    "Nunavut": "X",
+    "Northwest Territories": "X",
+    "Ontario": ["K", "L", "M", "N", "P"],
+    "Prince Edward Island": "C",
+    "Quebec": ["G", "H", "J"],
+    "Saskatchewan": "S",
+    "Yukon": "Y"
+}
 
-from SimpleGraphics import *
-
-WIDTH = 800
-HEIGHT = 600
-
-# Draw x-axis
-line(0, HEIGHT / 2, WIDTH, HEIGHT / 2)
-# Draw y-axis
-line(WIDTH / 2, 0, WIDTH / 2, HEIGHT)
-
-for i in range(0, 26 * 30, 30):
-    # Draw horizontal ticks
-    line(i, HEIGHT / 2 - 3, i, HEIGHT / 2 + 3)
-    # Draw vertical ticks
-    line(WIDTH / 2 - 3, i, WIDTH / 2 + 3, i)
+# postal_code = input("Enter a 6 character postal code (A1A1A1): ")
+# print("That postal code resides in")
