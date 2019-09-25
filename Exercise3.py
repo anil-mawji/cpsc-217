@@ -25,7 +25,7 @@ def get_dog_years(years):
 
 while True:
     try:
-        age = float(input("Enter your age:\n"))
+        age = float(input("Enter your age: "))
         if age < 0:
             # Exit program
             break
