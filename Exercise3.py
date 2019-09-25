@@ -12,7 +12,7 @@ def get_dog_years(years):
         return years * 10.5
     dog_years = 0
     # Add 10.5 years to dog_years a maximum of two times
-    for i in range(2):
+    for _ in range(2):
         if years - 1 >= 0:
             dog_years = dog_years + 10.5
             years = years - 1
