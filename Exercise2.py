@@ -66,7 +66,7 @@ rect(DOOR_X, DOOR_Y, DOOR_WIDTH, DOOR_HEIGHT)
 
 # Draw window
 setFill("yellow2")
-rect(WINDOW_X, WINDOW_Y, 150, 100)
+rect(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT)
 # Vertical line
 line(WINDOW_X + WINDOW_WIDTH / 2, WINDOW_Y, WINDOW_X + WINDOW_WIDTH / 2, WINDOW_Y + WINDOW_HEIGHT)
 # Horizontal line
