@@ -23,13 +23,11 @@ WINDOW_X = DOOR_X + WINDOW_HEIGHT + 50
 WINDOW_Y = (HOUSE_Y + HOUSE_HEIGHT + WINDOW_HEIGHT) / 2
 
 # Draw sky
-setOutline("turquoise1")
-setFill("turquoise1")
+setColor("turquoise1")
 rect(0, 0, WIDTH, 400)
 
 # Draw cloud
-setOutline("white")
-setFill("white")
+setColor("white")
 ellipse(25, 50, 75, 75)
 ellipse(75, 50, 100, 75)
 ellipse(50, 100, 50, 50)
@@ -38,13 +36,11 @@ ellipse(125, 50, 75, 50)
 ellipse(100, 75, 125, 75)
 
 # Draw sun
-setOutline("yellow")
-setFill("yellow")
+setColor("yellow")
 ellipse(WIDTH - 200, -200, 400, 400)
 
 # Draw grass
-setOutline("sea green")
-setFill("sea green")
+setColor("sea green")
 rect(0, 400, WIDTH, 200)
 
 setOutline("black")
@@ -59,7 +55,7 @@ polygon(
     # Leftmost vertex
     HOUSE_X - 20, HOUSE_Y,
     # Center vertex
-    HOUSE_X + HOUSE_WIDTH/2, HOUSE_Y - 100,
+    HOUSE_X + HOUSE_WIDTH / 2, HOUSE_Y - 100,
     # Rightmost vertex
     HOUSE_X + HOUSE_WIDTH + 20, HOUSE_Y
 )
