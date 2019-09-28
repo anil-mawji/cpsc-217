@@ -10,7 +10,7 @@ HUMAN_TO_DOG_YEARS = 10.5
 # @return an age in dog years
 def get_dog_years(years):
     # First two dog years are equivalent to 10.5 human years
-    return years * HUMAN_TO_DOG_YEARS if years <= 2 else (years - 2) * 4 + HUMAN_TO_DOG_YEARS * 2
+    return (years - 2) * 4 + HUMAN_TO_DOG_YEARS * 2 if years > 2 else years * HUMAN_TO_DOG_YEARS
 
 
 while True:
