@@ -1,6 +1,7 @@
 ##
 # CPSC 217 Exercise 3: Better Human Years and Dog Years
 # Copyright (C) 2019 Anil Mawji
+# UCID: 30099809
 
 HUMAN_TO_DOG_YEARS = 10.5
 

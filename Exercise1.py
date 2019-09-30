@@ -1,6 +1,7 @@
 ##
 # CPSC 217 Exercise 1: Human Years and Dog Years
 # Copyright (C) 2019 Anil Mawji
+# UCID: 30099809
 
 name = input("Enter your name: ")
 while True:

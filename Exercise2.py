@@ -1,6 +1,7 @@
 ##
 # CPSC 217 Exercise 2: Home Sweet Home
 # Copyright (C) 2019 Anil Mawji
+# UCID: 30099809
 
 from SimpleGraphics import *
 

@@ -1,3 +1,8 @@
+##
+# CPSC 217 Exercise 6: Where Are You?
+# Copyright (C) 2019 Anil Mawji
+# UCID: 30099809
+
 PROVINCE_LETTERS = {
     "T": "Alberta",
     "V": "British Columbia",
