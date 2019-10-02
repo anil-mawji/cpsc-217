@@ -14,11 +14,8 @@ EYE_WIDTH = 135
 EYE_HEIGHT = 60
 
 # Position head relative to it's centre
-# x = int(input("Enter the x position: ")) - SIZE_X / 2
-# y = int(input("Enter the y position: ")) - SIZE_Y / 2
-
-x = 400 - SIZE_X / 2
-y = 300 - SIZE_Y / 2
+x = int(input("Enter the x position: ")) - SIZE_X / 2
+y = int(input("Enter the y position: ")) - SIZE_Y / 2
 
 # Draw background
 background("deep pink")
