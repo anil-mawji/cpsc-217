@@ -5,18 +5,23 @@
 
 from SimpleGraphics import *
 
+# Declare constants
 WIDTH = 800
 HEIGHT = 600
 SIZE_X = 500
 SIZE_Y = 500
+EYE_WIDTH = 135
+EYE_HEIGHT = 60
 
-# Position face relative to it's centre
-x = int(input("Enter the x position: ")) - SIZE_X / 2
-y = int(input("Enter the y position: ")) - SIZE_Y / 2
+# Position head relative to it's centre
+# x = int(input("Enter the x position: ")) - SIZE_X / 2
+# y = int(input("Enter the y position: ")) - SIZE_Y / 2
+
+x = 400 - SIZE_X / 2
+y = 300 - SIZE_Y / 2
 
 # Draw background
-setColor("deep pink")
-rect(0, 0, WIDTH, HEIGHT)
+background("deep pink")
 
 # Draw shadow
 setColor("dark magenta")
@@ -25,10 +30,36 @@ ellipse(x + 20, y + 20, SIZE_X, SIZE_Y)
 setColor("gold")
 ellipse(x, y, SIZE_X, SIZE_Y)
 
-# Draw eyes
+# Draw left eye
 setColor("yellow4")
-pieSlice(x + 75, y + SIZE_Y - 300, 135, 60, 0, 180)
-pieSlice(x + SIZE_X - 210, y + SIZE_Y - 300, 135, 60, 0, 180)
+pieSlice(x + 75, y + SIZE_Y - 300, EYE_WIDTH, EYE_HEIGHT, 0, 180)
+# Left eye blob of left eye
+blob(
+    x + 75, y + SIZE_Y / 2 + 5,
+    x + 130, y + SIZE_Y / 2 - 35,
+    x + 75, y + SIZE_Y / 2 - 35
+)
+# Right eye blob of left eye
+blob(
+    x + EYE_WIDTH + 75, y + SIZE_Y / 2 + 5,
+    x*2 + EYE_WIDTH - 130, y + SIZE_Y / 2 - 35,
+    x + EYE_WIDTH + 75, y + SIZE_Y / 2 - 35
+)
+# Draw right eye
+pieSlice(x + SIZE_X - 210, y + SIZE_Y - 300, EYE_WIDTH, EYE_HEIGHT, 0, 180)
+# Left eye blob of right eye
+blob(
+    x + SIZE_X - EYE_WIDTH / 2 - 220 + 75, y + SIZE_Y / 2 + 5,
+    x + SIZE_X - EYE_WIDTH / 2 - 220 + 130, y + SIZE_Y / 2 - 35,
+    x + SIZE_X - EYE_WIDTH / 2 - 220 + 75, y + SIZE_Y / 2 - 35
+)
+# Right eye blob of right eye
+blob(
+    x + + SIZE_X - EYE_WIDTH - 15 + 75, y + SIZE_Y / 2 + 5,
+    x*2 + SIZE_X - EYE_WIDTH - 15 - 130, y + SIZE_Y / 2 - 35,
+    x + SIZE_X - EYE_WIDTH - 15 + 75, y + SIZE_Y / 2 - 35
+)
+
 # Draw left eyebrow
 blob(
     x + 15, y + 240,
@@ -43,10 +74,10 @@ blob(
 )
 
 # Draw mouth
-pieSlice(x + 75, y + SIZE_Y - 325, SIZE_X - 150, 250, -180, 180)
+pieSlice(x + 75, y + SIZE_Y - 325, SIZE_X - 150, 250, 0, -180)
 # Draw teeth
 setColor("white")
-pieSlice(x + 75, y + SIZE_Y - 240, SIZE_X - 150, 75, -180, 180)
+pieSlice(x + 75, y + SIZE_Y - 240, SIZE_X - 150, 75, 0, -180)
 
 # Draw left tear
 setColor("deep sky blue")
@@ -63,3 +94,8 @@ polygon(
     x + SIZE_X - 90, y + SIZE_Y - 150
 )
 ellipse(x + SIZE_X - 90, y + SIZE_Y - 200, 110, 110)
+
+# Sign name
+setColor("black")
+setFont("Times", "14", "bold")
+text(WIDTH - 60, HEIGHT - 20, "Anil Mawji")
