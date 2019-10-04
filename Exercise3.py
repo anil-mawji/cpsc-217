@@ -3,6 +3,8 @@
 # Copyright (C) 2019 Anil Mawji
 # UCID: 30099809
 
+HUMAN_TO_DOG_YEARS = 10.5
+
 
 # Convert a given age to an age in dog years
 # @param an age in human years
@@ -10,7 +12,7 @@
 def get_dog_years(years):
     # First two dog years are equal to 10.5 human years
     # Rest of dog years are equal to 4 human years
-    return (years - 2) * 4 + 10.5 * 2 if years > 2 else years * 10.5
+    return (years - 2) * 4 + HUMAN_TO_DOG_YEARS * 2 if years > 2 else years * HUMAN_TO_DOG_YEARS
 
 
 while True:
