@@ -30,31 +30,32 @@ ellipse(x, y, SIZE_X, SIZE_Y)
 # Draw left eye
 setColor("yellow4")
 pieSlice(x + 75, y + SIZE_Y - 300, EYE_WIDTH, EYE_HEIGHT, 0, 180)
-# Left eye blob of left eye
+# Draw left eye blob of left eye
 blob(
-    x + 75, y + SIZE_Y / 2 + 5,
-    x + 130, y + SIZE_Y / 2 - 35,
+    x + 75, y + SIZE_Y / 2,
+    x + 140, y + SIZE_Y / 2 - 35,
     x + 75, y + SIZE_Y / 2 - 35
 )
-# Right eye blob of left eye
+# Draw right eye blob of left eye
 blob(
-    x + EYE_WIDTH + 75, y + SIZE_Y / 2 + 5,
-    x*2 + EYE_WIDTH - 130, y + SIZE_Y / 2 - 35,
-    x + EYE_WIDTH + 75, y + SIZE_Y / 2 - 35
+    x + SIZE_X - 210 - 75, y + SIZE_Y / 2,
+    x + SIZE_X - 210 - 140, y + SIZE_Y / 2 - 35,
+    x + SIZE_X - 210 - 75, y + SIZE_Y / 2 - 35
 )
+
 # Draw right eye
 pieSlice(x + SIZE_X - 210, y + SIZE_Y - 300, EYE_WIDTH, EYE_HEIGHT, 0, 180)
-# Left eye blob of right eye
+# Draw left eye blob of right eye
 blob(
-    x + SIZE_X - EYE_WIDTH / 2 - 220 + 75, y + SIZE_Y / 2 + 5,
-    x + SIZE_X - EYE_WIDTH / 2 - 220 + 130, y + SIZE_Y / 2 - 35,
-    x + SIZE_X - EYE_WIDTH / 2 - 220 + 75, y + SIZE_Y / 2 - 35
+    x + 210 + 75, y + SIZE_Y / 2,
+    x + 210 + 140, y + SIZE_Y / 2 - 35,
+    x + 210 + 75, y + SIZE_Y / 2 - 35
 )
-# Right eye blob of right eye
+# Draw right eye blob of right eye
 blob(
-    x + + SIZE_X - EYE_WIDTH - 15 + 75, y + SIZE_Y / 2 + 5,
-    x*2 + SIZE_X - EYE_WIDTH - 15 - 130, y + SIZE_Y / 2 - 35,
-    x + SIZE_X - EYE_WIDTH - 15 + 75, y + SIZE_Y / 2 - 35
+    x + SIZE_X - 75, y + SIZE_Y / 2,
+    x + SIZE_X - 140, y + SIZE_Y / 2 - 35,
+    x + SIZE_X - 75, y + SIZE_Y / 2 - 35
 )
 
 # Draw left eyebrow
