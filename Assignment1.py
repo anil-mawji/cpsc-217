@@ -32,42 +32,42 @@ setColor("yellow4")
 pieSlice(x + 75, y + SIZE_Y - 300, EYE_WIDTH, EYE_HEIGHT, 0, 180)
 # Draw left eye blob of left eye
 blob(
-    x + 75, y + SIZE_Y / 2,
+    x + 75,  y + SIZE_Y / 2,
     x + 140, y + SIZE_Y / 2 - 35,
-    x + 75, y + SIZE_Y / 2 - 35
+    x + 75,  y + SIZE_Y / 2 - 35
 )
 # Draw right eye blob of left eye
 blob(
-    x + SIZE_X - 210 - 75, y + SIZE_Y / 2,
-    x + SIZE_X - 210 - 140, y + SIZE_Y / 2 - 35,
-    x + SIZE_X - 210 - 75, y + SIZE_Y / 2 - 35
+    x + SIZE_X - 215 - 75,  y + SIZE_Y / 2,
+    x + SIZE_X - 215 - 140, y + SIZE_Y / 2 - 35,
+    x + SIZE_X - 215 - 75,  y + SIZE_Y / 2 - 35
 )
 
 # Draw right eye
 pieSlice(x + SIZE_X - 210, y + SIZE_Y - 300, EYE_WIDTH, EYE_HEIGHT, 0, 180)
 # Draw left eye blob of right eye
 blob(
-    x + 210 + 75, y + SIZE_Y / 2,
-    x + 210 + 140, y + SIZE_Y / 2 - 35,
-    x + 210 + 75, y + SIZE_Y / 2 - 35
+    x + 215 + 75,  y + SIZE_Y / 2,
+    x + 215 + 140, y + SIZE_Y / 2 - 35,
+    x + 215 + 75,  y + SIZE_Y / 2 - 35
 )
 # Draw right eye blob of right eye
 blob(
-    x + SIZE_X - 75, y + SIZE_Y / 2,
+    x + SIZE_X - 75,  y + SIZE_Y / 2,
     x + SIZE_X - 140, y + SIZE_Y / 2 - 35,
-    x + SIZE_X - 75, y + SIZE_Y / 2 - 35
+    x + SIZE_X - 75,  y + SIZE_Y / 2 - 35
 )
 
 # Draw left eyebrow
 blob(
-    x + 15, y + 240,
-    x + 80, y + 160,
+    x + 15,  y + 240,
+    x + 80,  y + 160,
     x + 180, y + 125
 )
 # Draw right eyebrow
 blob(
-    x + SIZE_X - 15, y + 240,
-    x + SIZE_X - 80, y + 160,
+    x + SIZE_X - 15,  y + 240,
+    x + SIZE_X - 80,  y + 160,
     x + SIZE_X - 180, y + 125
 )
 
@@ -81,15 +81,15 @@ pieSlice(x + 75, y + SIZE_Y - 240, SIZE_X - 150, 75, 0, -180)
 setColor("deep sky blue")
 polygon(
     x + 100, y + SIZE_Y - 275,
-    x - 8, y + SIZE_Y - 180,
-    x + 90, y + SIZE_Y - 150
+    x - 8,   y + SIZE_Y - 180,
+    x + 90,  y + SIZE_Y - 150
 )
 ellipse(x - 20, y + SIZE_Y - 200, 110, 110)
 # Draw right tear
 polygon(
     x + SIZE_X - 100, y + SIZE_Y - 275,
-    x + SIZE_X + 8, y + SIZE_Y - 180,
-    x + SIZE_X - 90, y + SIZE_Y - 150
+    x + SIZE_X + 8,   y + SIZE_Y - 180,
+    x + SIZE_X - 90,  y + SIZE_Y - 150
 )
 ellipse(x + SIZE_X - 90, y + SIZE_Y - 200, 110, 110)
 

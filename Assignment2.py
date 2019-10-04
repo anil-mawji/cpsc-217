@@ -29,3 +29,4 @@ while x < 26 * 30:
     line((*last, x, result) if last else (0, 0, x, result))
     last = (x, result)
     x += 30
+
