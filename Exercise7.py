@@ -3,6 +3,6 @@
 # Copyright (C) 2019 Anil Mawji
 # UCID: 30099809
 
-with open(input("Enter the name of a file: "), "r") as f:
+with open(input("Enter the name of a file: ")) as f:
     print("That file contains", sum(line.count(",") for line in f), "values.")
 f.close()
