@@ -5,7 +5,6 @@
 
 from SimpleGraphics import *
 
-# Declare constants
 WIDTH = 800
 HEIGHT = 600
 SIZE_X = 500
@@ -85,6 +84,7 @@ polygon(
     x + 90,  y + SIZE_Y - 150
 )
 ellipse(x - 20, y + SIZE_Y - 200, 110, 110)
+
 # Draw right tear
 polygon(
     x + SIZE_X - 100, y + SIZE_Y - 275,
