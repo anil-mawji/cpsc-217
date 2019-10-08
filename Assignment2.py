@@ -8,45 +8,51 @@ from math import *
 
 WIDTH = 800
 HEIGHT = 600
-origin = {"x": WIDTH / 2, "y": HEIGHT / 2}
+ORIGIN = {"x": WIDTH / 2, "y": HEIGHT / 2}
+
+expr = "x"
+col = None
 
 background("white")
 
+
+# Plots a function to the display
+# @expression y as a function of x
+# @color the color of the graph
+def draw_function(expression, color):
+    setColor(color)
+    # Plot points
+    p_x = -13
+    while p_x < 13:
+        p_y = eval(expression)
+        rect(ORIGIN["x"] + p_x * 30, ORIGIN["y"] - p_y * 30, 5, 5)
+        print("y = {}".format(p_y))
+        p_x += 0.1
+
+
 # Draw x-axis
-line(0, origin["y"], WIDTH, origin["y"])
+line(0, ORIGIN["y"], WIDTH, ORIGIN["y"])
 for x in range(10, WIDTH, 30):
     # Draw horizontal tick
-    line(x, origin["y"] - 3, x, origin["y"] + 3)
+    line(x, ORIGIN["y"] - 3, x, ORIGIN["y"] + 3)
     label = x // 30 - 13
     if label != 0:
         # Draw number label
-        text(x, origin["y"] + 10, label)
+        text(x, ORIGIN["y"] + 10, label)
 
 # Draw y-axis
-line(origin["x"], 0, origin["x"], HEIGHT)
+line(ORIGIN["x"], 0, ORIGIN["x"], HEIGHT)
 for y in range(-HEIGHT, 30, 30):
     # Draw vertical tick
-    line(origin["x"] - 3, -y, origin["x"] + 3, -y)
+    line(ORIGIN["x"] - 3, -y, ORIGIN["x"] + 3, -y)
     label = y // 30 + 10
     if label != 0:
         # Draw number label
-        text(origin["x"] - 10, -y, label)
-
-expr = "x"
-color = None
+        text(ORIGIN["x"] - 10, -y, label)
 
 while len(expr) > 0:
     expr = input("Enter an arithmetic expression: ")
-
     if len(expr) > 0:
         # Set graph color
-        color = "red" if not color else "blue" if color == "red" else "green" if color == "blue" else "red"
-        setColor(color)
-
-        # Plot points
-        x = -13
-        while x < 13:
-            y = eval(expr)
-            rect(origin["x"] + x * 30, origin["y"] - y * 30, 5, 5)
-            print("y = {}".format(y))
-            x += 0.1
+        col = "red" if not col else "blue" if col == "red" else "green" if col == "blue" else "red"
+        draw_function(expr, col)
