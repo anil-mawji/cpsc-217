@@ -15,14 +15,12 @@ def get_dog_years(years):
     return (years - 2) * 4 + HUMAN_TO_DOG_YEARS * 2 if years > 2 else years * HUMAN_TO_DOG_YEARS
 
 
-while True:
+age = -1
+while age < 0:
     try:
         age = float(input("Enter your age: "))
-        if age < 0:
-            # Exit program
-            break
-        # Round the result to 1 decimal place
-        print("That's equivalent to %.1f" % get_dog_years(age), "dog years!")
     except ValueError:
         # If input was not a number then ask for age again
         pass
+# Round the result to 1 decimal place and display
+print("That's equivalent to %.1f" % get_dog_years(age), "dog years!")
