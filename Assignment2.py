@@ -13,22 +13,23 @@ ORIGIN = {"x": WIDTH / 2, "y": HEIGHT / 2}
 expr = "x"
 col = None
 
-background("white")
 
-
-# Plots a function to the display
+# Draws a function to the display
 # @expression y as a function of x
 # @color the color of the graph
 def draw_function(expression, color):
     setColor(color)
     # Plot points
-    p_x = -13
-    while p_x < 13:
-        p_y = eval(expression)
-        rect(ORIGIN["x"] + p_x * 30, ORIGIN["y"] - p_y * 30, 5, 5)
-        print("y = {}".format(p_y))
-        p_x += 0.1
+    px = -13
+    while px < 13:
+        py = eval(expression)
+        ellipse(ORIGIN["x"] + px * 30, ORIGIN["y"] - py * 30, 5, 5)
+        print("y = {}".format(py))
+        px += 0.1
 
+
+# Set background color
+background("white")
 
 # Draw x-axis
 line(0, ORIGIN["y"], WIDTH, ORIGIN["y"])
