@@ -62,22 +62,24 @@ def get_screen_coordinates(px, py):
 
 
 while len(expr) > 0:
-    expr = input("Enter the expression (blank line to quit): \ny = ")
-    if len(expr) > 0:
-        # Set graph color
-        setColor(COLORS[color_index])
-        print(color_index)
-        color_index = color_index + 1 if color_index + 1 < len(COLORS) else 0
+    expr = input("Enter the expression (blank line to quit):\ny = ")
+    if len(expr) == 0:
+        close()
+        exit(0)
 
-        # Set initial x value at the left side of x-axis
-        x = -UNITS_X
-        # Stores the x and y values of the previously calculated point
-        last = get_screen_coordinates(x, eval(expr))
-        # Plot points
-        while x < UNITS_X:
-            y = eval(expr)
-            # Unpack the coordinates of the last and the new point
-            # Draw a line from the last point to the new point
-            line(*last, *get_screen_coordinates(x, y))
-            last = get_screen_coordinates(x, y)
-            x += DELTA_X
+    # Set graph color
+    setColor(COLORS[color_index])
+    color_index = color_index + 1 if color_index + 1 < len(COLORS) else 0
+
+    # Set initial x value at the left side of x-axis
+    x = -UNITS_X
+    # Stores the x and y values of the previously calculated point
+    last = get_screen_coordinates(x, eval(expr))
+    # Plot points
+    while x < UNITS_X:
+        y = eval(expr)
+        # Unpack the coordinates of the last and the new point
+        # Draw a line from the last point to the new point
+        line(*last, *get_screen_coordinates(x, y))
+        last = get_screen_coordinates(x, y)
+        x += DELTA_X
