@@ -15,18 +15,21 @@ TICK_SIZE = 6
 SCALE = 30
 # Colors to use when drawing the graph
 COLORS = ["red", "blue", "green"]
+# Size in pixels to use when drawing points of extrema
+EXTREMA_SIZE = 6
 
 # Location of the origin (0, 0) on the screen
 ORIGIN_X = WIDTH // 2
 ORIGIN_Y = HEIGHT // 2
-# Num units in the positive/negative x-axis
+# Num units in one quadrant of the x-axis
 UNITS_X = WIDTH // SCALE // 2
-# Num units in the positive/negative y-axis
+# Num units in one quadrant of the y-axis
 UNITS_Y = HEIGHT // SCALE // 2
 # How much x increases between each calculation of y
 DELTA_X = 0.2
 
 expr = "x"
+# Starting color is red
 color_index = 0
 # Set background color
 background("white")
@@ -73,14 +76,15 @@ def draw_function(expression):
 
     while x < UNITS_X:
         current_pt = x, eval(expression)
-        # Unpack the coordinates of the last and the new point
+        # Unpack the coordinates of the last and the new points
         # Draw a line from the last point to the new point
         line(*get_screen_coordinates(*last_pt),
              *get_screen_coordinates(*current_pt))
-
+        # Increment x to prepare for drawing the next point
         x += DELTA_X
         next_pt = x, eval(expression)
         draw_extrema(last_pt, current_pt, next_pt)
+        # Update previous point to prepare for drawing the next point
         last_pt = current_pt
 
 
@@ -94,25 +98,28 @@ def draw_extrema(last_point, current_point, next_point):
 
     # Local minimum
     if slope_last < 0 < slope_next:
-        setColor("purple")
-        ellipse(*get_screen_coordinates(current_point[0] - DELTA_X / 2, current_point[1]), 5, 5)
+        setColor("orange")
+        position = get_screen_coordinates(*current_point)
+        ellipse(position[0] - EXTREMA_SIZE / 2, position[1] - EXTREMA_SIZE / 2,
+                EXTREMA_SIZE, EXTREMA_SIZE)
     # Local maximum
     elif slope_last > 0 > slope_next:
-        setColor("orange")
-        ellipse(*get_screen_coordinates(current_point[0] - DELTA_X / 2, current_point[1]), 5, 5)
+        setColor("purple")
+        position = get_screen_coordinates(*current_point)
+        ellipse(position[0] - EXTREMA_SIZE / 2, position[1] - EXTREMA_SIZE / 2,
+                EXTREMA_SIZE, EXTREMA_SIZE)
     # Reset color setting
     setColor(COLORS[color_index])
 
 
 while expr != "":
     expr = input("Enter the expression (blank line to quit):\ny = ")
+    # Close program if input was blank
     if expr == "":
         close()
         exit(0)
-
     # Set graph color
     setColor(COLORS[color_index])
-    # Sketch curve
     draw_function(expr)
-    # Update graph color
+    # Prepare new color for drawing the next expression
     color_index = color_index + 1 if color_index + 1 < len(COLORS) else 0
