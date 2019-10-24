@@ -2,6 +2,8 @@
 # CPSC 217 Assignment 2
 # Copyright (C) 2019 Anil Mawji
 # UCID: 30099809
+#
+# Program Description: Graphs mathematical functions given by the user and plots their maximum and minimum points
 
 from SimpleGraphics import *
 from math import *
@@ -58,6 +60,7 @@ for y in range(-HEIGHT, SCALE, SCALE):
 
 
 # Converts x and y values to their corresponding position on the screen
+#
 # @param px     an x value on a graph
 # @param py     the y value calculated from the expression
 # @param return the position of px and py on the screen
@@ -66,7 +69,8 @@ def get_screen_coordinates(px, py):
 
 
 # Draws a curve to the screen
-# @param equation of the function to be drawn
+#
+# @param expression equation of the function to be drawn
 def draw_function(expression):
     # Set initial x value at the left side of x-axis
     x = -UNITS_X
@@ -89,6 +93,7 @@ def draw_function(expression):
 
 
 # Checks if a point is a max or min based on the points before and after it
+#
 # @param last_point    the point on the graph that comes prior to current_point
 # @param current_point the current point being checked
 # @param next_point    the point on the graph that follows current_point
