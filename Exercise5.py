@@ -4,7 +4,7 @@
 # UCID: 30099809
 
 value, tab = "x", []
-while len(value) != 0:
+while value != "":
     value = input("Enter a value (blank line to quit): ")
     # Add value to the list
     tab.append(value)
