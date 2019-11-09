@@ -613,13 +613,39 @@ def loadImages():
 ##
 ###############################################################################
 
+# Desc
+#
+# @param points
+# @param max_length
+def trim_player_length(points, max_length):
+    length = 0
+    for i in range(0, len(points) - 3, 2):
+        length += dist(points[i + 2], points[i + 3], points[i], points[i + 1])
+    while length > max_length:
+        length -= dist(points[2], points[3], points[0], points[1])
+        del points[:2]
 
-def trim_length(points, max_length):
-    for x in range(0, len(points)):
-        print("X:", x)
-    for y in range(1, len(points)):
-        print("Y:", y)
 
+# Desc
+#
+# @param cur_x
+# @param cur_y
+# @param points
+def collided_with_self(cur_x, cur_y, points):
+    for i in range(len(points) - 2, 5, -2):
+        if doIntersect(cur_x, cur_y, points[i], points[i - 1],
+                       points[i - 2], points[i - 3], points[i - 4], points[i - 5]):
+            return True
+    return False
+
+
+# Desc
+#
+# @param cur_x
+# @param cur_y
+# @param points
+def collided_with_snake(cur_x, cur_y, points):
+    return False
 
 
 ###############################################################################
@@ -781,34 +807,24 @@ def main():
         #
         # Part 1: A Moving Dot...
         #
-
-        p1_x += cos(p1_heading) * speed * elapsed
-        p1_y += sin(p1_heading) * speed * elapsed
-
+        if not p1_lost:
+            p1_x += cos(p1_heading) * speed * elapsed
+            p1_y += sin(p1_heading) * speed * elapsed
+            #
+            # Part 2: A Long and Permanent Line
+            #
+            p1_queue.append(p1_x)
+            p1_queue.append(p1_y)
+            #
+            # Part 3: A Growing Snake
+            #
+            trim_player_length(p1_queue, max_length)
         #
-        # Part 2: A Long and Permanent Line
+        # Part 4 / 5 / 6: Colliding with Walls / Colliding with Yourself / Colliding with Other Snakes
         #
-
-        p1_queue.append(p1_x)
-        p1_queue.append(p1_y)
-
-        #
-        # Part 3: A Growing Snake
-        #
-
-        trim_length(p1_queue, max_length)
-
-        #
-        # Part 4: Colliding with Walls
-        #
-
-        #
-        # Part 5: Colliding with Yourself
-        #
-
-        #
-        # Part 6: Colliding with Other Snakes
-        #
+        p1_lost = p1_x > getWidth() or p1_x < 0 or p1_y > getHeight() or p1_y < 0\
+            or collided_with_self(p1_x, p1_y, p1_queue)\
+            or collided_with_snake(p1_x, p1_y, p1_queue)
 
         ###############################################################################
         ##
