@@ -3,10 +3,11 @@
 # Copyright (C) 2019 Anil Mawji
 # UCID: 30099809
 
-value, tab = "x", []
+table = []
+value = input("Enter a value (blank line to quit): ")
 while value != "":
-    value = input("Enter a value (blank line to quit): ")
     # Add value to the list
-    tab.append(value)
+    table.append(value)
+    value = input("Enter a value (blank line to quit): ")
 # Display list in reverse order
-print(*reversed(tab), sep="\n")
+print(*reversed(table), sep="\n")
