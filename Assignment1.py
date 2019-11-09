@@ -5,8 +5,8 @@
 
 from SimpleGraphics import *
 
-WIDTH = 800
-HEIGHT = 600
+WIDTH = getWidth()
+HEIGHT = getHeight()
 SIZE_X = 500
 SIZE_Y = 500
 EYE_WIDTH = 135
