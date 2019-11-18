@@ -620,31 +620,23 @@ def loadImages():
 def trim_player_length(points, max_length):
     length = 0
     for i in range(0, len(points) - 3, 2):
-        length += dist(points[i + 2], points[i + 3], points[i], points[i + 1])
+        length += dist(points[i], points[i + 1], points[i + 2], points[i + 3])
     while length > max_length:
-        length -= dist(points[2], points[3], points[0], points[1])
+        length -= dist(points[0], points[1], points[2], points[3])
         del points[:2]
 
 
 # Desc
 #
-# @param cur_x
-# @param cur_y
+# @param p1_x
+# @param p1_y
 # @param points
-def collided_with_self(cur_x, cur_y, points):
-    for i in range(len(points) - 2, 5, -2):
-        if doIntersect(cur_x, cur_y, points[i], points[i - 1],
-                       points[i - 2], points[i - 3], points[i - 4], points[i - 5]):
+def has_collided(p1_x, p1_y, points):
+    points = points[:-4]
+    for i in range(0, len(points) - 1 - 5, 2):
+        if doIntersect(points[i], points[i + 1], points[i + 2], points[i + 3],
+                       points[i + 4], points[i + 5], p1_x, p1_y):
             return True
-    return False
-
-
-# Desc
-#
-# @param cur_x
-# @param cur_y
-# @param points
-def collided_with_snake(cur_x, cur_y, points):
     return False
 
 
@@ -820,11 +812,12 @@ def main():
             #
             trim_player_length(p1_queue, max_length)
         #
-        # Part 4 / 5 / 6: Colliding with Walls / Colliding with Yourself / Colliding with Other Snakes
+        # Parts 4,5: Colliding with Walls, Colliding with Yourself
         #
-        p1_lost = p1_x > getWidth() or p1_x < 0 or p1_y > getHeight() or p1_y < 0\
-            or collided_with_self(p1_x, p1_y, p1_queue)\
-            or collided_with_snake(p1_x, p1_y, p1_queue)
+        p1_lost = p1_x > getWidth() or p1_x < 0\
+            or p1_y > getHeight() or p1_y < 0\
+            or has_collided(p1_x, p1_y, p1_queue)\
+            # or (has_collided(p1_x, p1_y, points) for points in e_queues)
 
         ###############################################################################
         ##
