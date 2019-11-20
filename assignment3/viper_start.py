@@ -632,10 +632,9 @@ def trim_player_length(points, max_length):
 # @param p1_y
 # @param points
 def has_collided(p1_x, p1_y, points):
-    points = points[:-4]
-    for i in range(0, len(points) - 1 - 5, 2):
-        if doIntersect(points[i], points[i + 1], points[i + 2], points[i + 3],
-                       points[i + 4], points[i + 5], p1_x, p1_y):
+    for i in range(0, len(points) - 5, 2):
+        if doIntersect(p1_x, p1_y, points[i], points[i + 1], points[i + 2], points[i + 3],
+                       points[i + 4], points[i + 5]):
             return True
     return False
 
@@ -814,10 +813,16 @@ def main():
         #
         # Parts 4,5: Colliding with Walls, Colliding with Yourself
         #
+
         p1_lost = p1_x > getWidth() or p1_x < 0\
             or p1_y > getHeight() or p1_y < 0\
-            or has_collided(p1_x, p1_y, p1_queue)\
+            or has_collided(p1_x, p1_y, p1_queue[:-4])\
             # or (has_collided(p1_x, p1_y, points) for points in e_queues)
+
+        for points in e_queues:
+            if has_collided(p1_x, p1_y, points):
+                pl_lost = True
+                break
 
         ###############################################################################
         ##
