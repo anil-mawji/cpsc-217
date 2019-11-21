@@ -618,7 +618,9 @@ def loadImages():
 # @param points
 # @param max_length
 def trim_player_length(points, max_length):
-    length = sum(dist(points[i], points[i+1], points[i+2], points[i+3]) for i in range(0, len(points) - 3, 2))
+    length = 0
+    for i in range(0, len(points) - 3, 2):
+        length += dist(points[i], points[i + 1], points[i + 2], points[i + 3])
     while length > max_length:
         length -= dist(points[0], points[1], points[2], points[3])
         del points[:2]
@@ -629,9 +631,10 @@ def trim_player_length(points, max_length):
 # @param p1_x
 # @param p1_y
 # @param points
-def has_collided(p1_x, p1_y, p2_x, p2_y, points):
-    for i in range(len(points)-1, 6, -2):
-        if doIntersect(p1_x, p1_y, p2_x, p2_y, points[i-3], points[i-4], points[i-5], points[i-6]):
+def has_collided(p1_x, p1_y, points):
+    for i in range(0, len(points) - 5, 2):
+        if doIntersect(p1_x, p1_y, points[i], points[i + 1], points[i + 2], points[i + 3],
+                       points[i + 4], points[i + 5]):
             return True
     return False
 
@@ -801,24 +804,25 @@ def main():
             #
             # Part 2: A Long and Permanent Line
             #
-            p1_queue += [p1_x, p1_y]
+            p1_queue.append(p1_x)
+            p1_queue.append(p1_y)
             #
             # Part 3: A Growing Snake
             #
             trim_player_length(p1_queue, max_length)
-            #
-            # Parts 4,5: Colliding with Walls, Colliding with Yourself
-            #
-            if len(p1_queue) >= 4:
-                if len(p1_queue) >= 6 and (p1_x > getWidth() or p1_x < 0 or p1_y > getHeight() or p1_y < 0
-                                           or has_collided(p1_x, p1_y, p1_queue[-6], p1_queue[-5], p1_queue[:-4])):
-                    p1_lost = True
-                #
-                # Part 6: Colliding with Other Snakes
-                #
-                for e_queue in e_queues:
-                    if has_collided(p1_x, p1_y, p1_queue[-4], p1_queue[-3], e_queue):
-                        p1_lost = True
+        #
+        # Parts 4,5: Colliding with Walls, Colliding with Yourself
+        #
+
+        p1_lost = p1_x > getWidth() or p1_x < 0\
+            or p1_y > getHeight() or p1_y < 0\
+            or has_collided(p1_x, p1_y, p1_queue[:-4])\
+            # or (has_collided(p1_x, p1_y, points) for points in e_queues)
+
+        for points in e_queues:
+            if has_collided(p1_x, p1_y, points):
+                pl_lost = True
+                break
 
         ###############################################################################
         ##
