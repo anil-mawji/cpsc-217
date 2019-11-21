@@ -808,7 +808,7 @@ def main():
             #
             # Part 3: A Growing Snake
             #
-            update_length(p1_queue, max_length)
+            trim_length(p1_queue, max_length)
             #
             # Parts 4,5: Colliding with Walls, Colliding with Yourself
             #
