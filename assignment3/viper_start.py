@@ -613,28 +613,28 @@ def loadImages():
 ##
 ###############################################################################
 
-# Desc
+# Finds the length of the player snake and trims the length until max_length is no longer exceeded
 #
-# @param points
-# @param max_length
-def trim_player_length(points, max_length):
-    length = 0
-    for i in range(0, len(points) - 3, 2):
-        length += dist(points[i], points[i + 1], points[i + 2], points[i + 3])
+# @param queue      list containing the points of the player snake
+# @param max_length the maximum snake length allowed
+def trim_length(queue, max_length):
+    # Find current length of player by adding up all the distances between each point
+    length = sum(dist(queue[i], queue[i+1], queue[i+2], queue[i+3]) for i in range(0, len(queue) - 3, 2))
     while length > max_length:
-        length -= dist(points[0], points[1], points[2], points[3])
-        del points[:2]
+        # Decrement the length by the distance between two points
+        length -= dist(queue[0], queue[1], queue[2], queue[3])
+        del queue[:2]
 
 
-# Desc
+# Checks whether or not the player has collided with any line segments from a list of points
 #
-# @param p1_x
-# @param p1_y
-# @param points
-def has_collided(p1_x, p1_y, points):
-    for i in range(0, len(points) - 5, 2):
-        if doIntersect(p1_x, p1_y, points[i], points[i + 1], points[i + 2], points[i + 3],
-                       points[i + 4], points[i + 5]):
+# @param p1_x  current x position of player
+# @param p1_y  current y position of player
+# @param queue list containing the points of a snake
+# @return      boolean determining whether or not the player has collided
+def has_collided(p1_x, p1_y, p2_x, p2_y, queue):
+    for i in range(len(queue)-1, 6, -2):
+        if doIntersect(p1_x, p1_y, p2_x, p2_y, queue[i-3], queue[i-4], queue[i-5], queue[i-6]):
             return True
     return False
 
@@ -804,25 +804,24 @@ def main():
             #
             # Part 2: A Long and Permanent Line
             #
-            p1_queue.append(p1_x)
-            p1_queue.append(p1_y)
+            p1_queue += [p1_x, p1_y]
             #
             # Part 3: A Growing Snake
             #
-            trim_player_length(p1_queue, max_length)
-        #
-        # Parts 4,5: Colliding with Walls, Colliding with Yourself
-        #
-
-        p1_lost = p1_x > getWidth() or p1_x < 0\
-            or p1_y > getHeight() or p1_y < 0\
-            or has_collided(p1_x, p1_y, p1_queue[:-4])\
-            # or (has_collided(p1_x, p1_y, points) for points in e_queues)
-
-        for points in e_queues:
-            if has_collided(p1_x, p1_y, points):
-                pl_lost = True
-                break
+            update_length(p1_queue, max_length)
+            #
+            # Parts 4,5: Colliding with Walls, Colliding with Yourself
+            #
+            if len(p1_queue) >= 4:
+                if len(p1_queue) >= 6 and (p1_x > getWidth() or p1_x < 0 or p1_y > getHeight() or p1_y < 0
+                                           or has_collided(p1_x, p1_y, p1_queue[-6], p1_queue[-5], p1_queue[:-4])):
+                    p1_lost = True
+                #
+                # Part 6: Colliding with Other Snakes
+                #
+                for e_queue in e_queues:
+                    if has_collided(p1_x, p1_y, p1_queue[-4], p1_queue[-3], e_queue):
+                        p1_lost = True
 
         ###############################################################################
         ##
