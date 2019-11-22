@@ -26,7 +26,7 @@ from time import time
 from functools import partial, reduce
 
 MAX_SCORE = 10  # What score has to be achieved for the game to end?
-COUNTDOWN_DURATION = 0  # How long is the countdown between rounds?
+COUNTDOWN_DURATION = 3  # How long is the countdown between rounds?
 
 FRAME_RATE = 30  # Target framerate to maintain
 BOUNDARY = [0, 0, 799, 0, 799, 599, 0, 599, 0, 0]  # Line segments for the edges
@@ -619,7 +619,7 @@ def loadImages():
 # @param max_length the maximum snake length allowed
 def trim_length(queue, max_length):
     # Find current length of player by adding up all the distances between each point
-    length = sum(dist(queue[i], queue[i+1], queue[i+2], queue[i+3]) for i in range(0, len(queue) - 3, 2))
+    length = sum(dist(queue[i], queue[i+1], queue[i+2], queue[i+3]) for i in range(0, len(queue)-3, 2))
     while length > max_length:
         # Decrement the length by the distance between two points
         length -= dist(queue[0], queue[1], queue[2], queue[3])
@@ -638,7 +638,7 @@ def trim_length(queue, max_length):
 # @return      boolean determining whether or not the player has collided
 def has_collided(p1_x, p1_y, p2_x, p2_y, queue):
     return True in (doIntersect(p1_x, p1_y, p2_x, p2_y, queue[i-3], queue[i-4], queue[i-5], queue[i-6])
-                    for i in range(len(queue)-1, 6, -2)) or False
+                    for i in range(len(queue)-1, 6, -2))
 
 
 ###############################################################################
