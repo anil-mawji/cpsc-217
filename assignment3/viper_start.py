@@ -26,7 +26,7 @@ from time import time
 from functools import partial, reduce
 
 MAX_SCORE = 10  # What score has to be achieved for the game to end?
-COUNTDOWN_DURATION = 3  # How long is the countdown between rounds?
+COUNTDOWN_DURATION = 0  # How long is the countdown between rounds?
 
 FRAME_RATE = 30  # Target framerate to maintain
 BOUNDARY = [0, 0, 799, 0, 799, 599, 0, 599, 0, 0]  # Line segments for the edges
@@ -623,10 +623,12 @@ def trim_length(queue, max_length):
     while length > max_length:
         # Decrement the length by the distance between two points
         length -= dist(queue[0], queue[1], queue[2], queue[3])
+        # Remove oldest pair of x and y values
         del queue[:2]
 
 
 # Checks whether or not the player has collided with any line segments from a list of points
+# Marginally improved performance due to list comprehension
 #
 # @param p1_x  current x position of player
 # @param p1_y  current y position of player
@@ -635,10 +637,8 @@ def trim_length(queue, max_length):
 # @param queue list containing the points of a snake
 # @return      boolean determining whether or not the player has collided
 def has_collided(p1_x, p1_y, p2_x, p2_y, queue):
-    if (doIntersect(p1_x, p1_y, p2_x, p2_y,
-                    queue[i-3], queue[i-4], queue[i-5], queue[i-6]) for i in range(len(queue)-1, 6, -2)):
-        return True
-    return False
+    return True in (doIntersect(p1_x, p1_y, p2_x, p2_y, queue[i-3], queue[i-4], queue[i-5], queue[i-6])
+                    for i in range(len(queue)-1, 6, -2)) or False
 
 
 ###############################################################################
