@@ -630,12 +630,14 @@ def trim_length(queue, max_length):
 #
 # @param p1_x  current x position of player
 # @param p1_y  current y position of player
+# @param p2_x  previous x position of player
+# @param p2_y  previous y position of player
 # @param queue list containing the points of a snake
 # @return      boolean determining whether or not the player has collided
 def has_collided(p1_x, p1_y, p2_x, p2_y, queue):
-    for i in range(len(queue)-1, 6, -2):
-        if doIntersect(p1_x, p1_y, p2_x, p2_y, queue[i-3], queue[i-4], queue[i-5], queue[i-6]):
-            return True
+    if (doIntersect(p1_x, p1_y, p2_x, p2_y,
+                    queue[i-3], queue[i-4], queue[i-5], queue[i-6]) for i in range(len(queue)-1, 6, -2)):
+        return True
     return False
 
 
