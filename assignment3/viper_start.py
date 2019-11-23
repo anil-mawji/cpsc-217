@@ -31,6 +31,7 @@ COUNTDOWN_DURATION = 3  # How long is the countdown between rounds?
 FRAME_RATE = 30  # Target framerate to maintain
 BOUNDARY = [0, 0, 799, 0, 799, 599, 0, 599, 0, 0]  # Line segments for the edges
 
+BARRIER_RANGE = [15, 30]  # Bonus: draw between 15 and 30 random barriers
 
 # of the screen
 
@@ -643,16 +644,15 @@ def has_collided(p1_x, p1_y, p2_x, p2_y, queue):
 
 
 # Bonus: Draw randomly positioned barriers around the map
+# The position of each barrier is offset at least 150 pixels in both the x and y directions
+# so that the player doesn't spawn on top of a barrier
 #
 # @return barrier_segments a list of lists, where each sublist contains the points for a single barrier
 def generate_barriers():
     barrier_segments = []
-    # Draw a total of 20 to 40 random barriers
-    for i in range(randrange(100)):
-        # Generate random barrier size
+    for i in range(randrange(BARRIER_RANGE[0], BARRIER_RANGE[1] + 1)):
+        # Generate random barrier data
         size = randrange(50, 100)
-        # Generate random barrier position.
-        # Position is greater than 150 pixels away from each end of the screen in both x and y direction
         x, y = randrange(150, getWidth() - 150), randrange(150, getHeight() - 150)
         # Decide whether or not the new barrier should be vertical (True) or horizontal (False)
         # by generating a random boolean. Append the points for the new barrier to the list of points
