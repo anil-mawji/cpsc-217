@@ -21,12 +21,12 @@
 #
 from SimpleGraphics import *
 from math import sin, cos, tan, atan2, pi, sqrt, fabs, ceil, floor
-from random import randrange
+from random import *
 from time import time
 from functools import partial, reduce
 
 MAX_SCORE = 10  # What score has to be achieved for the game to end?
-COUNTDOWN_DURATION = 3  # How long is the countdown between rounds?
+COUNTDOWN_DURATION = 0  # How long is the countdown between rounds?
 
 FRAME_RATE = 30  # Target framerate to maintain
 BOUNDARY = [0, 0, 799, 0, 799, 599, 0, 599, 0, 0]  # Line segments for the edges
@@ -617,6 +617,7 @@ def loadImages():
 #
 # @param queue      list containing the points of the player snake
 # @param max_length the maximum snake length allowed
+# @return           None
 def trim_length(queue, max_length):
     # Find current length of player by adding up all the distances between each point
     length = sum(dist(queue[i], queue[i+1], queue[i+2], queue[i+3]) for i in range(0, len(queue)-3, 2))
@@ -639,6 +640,25 @@ def trim_length(queue, max_length):
 def has_collided(p1_x, p1_y, p2_x, p2_y, queue):
     return True in (doIntersect(p1_x, p1_y, p2_x, p2_y, queue[i-3], queue[i-4], queue[i-5], queue[i-6])
                     for i in range(len(queue)-1, 6, -2))
+
+
+# Bonus: Draw randomly positioned barriers around the map
+# The position of each barrier is offset at least 150 pixels in both the x and y directions
+# so that the player doesn't spawn on top of a barrier
+#
+# @return barrier_segments a list of lists, where each sublist contains the points for a single barrier
+def generate_barriers():
+    barrier_segments = []
+    # Draw a total of 20 to 40 random barriers
+    for i in range(randrange(20, 40)):
+        # Generate random barrier data
+        size = randrange(50, 100)
+        x = randrange(150, getWidth() - 150)
+        y = randrange(150, getHeight() - 150)
+        # Decide whether or not the new barrier should be vertical (True) or horizontal (False)
+        # by generating a random boolean. Append the points for the new barrier to the list of points
+        barrier_segments.append([x, y, x, y + size] if random() >= 0.5 else [x, y, x + size, y])
+    return barrier_segments
 
 
 ###############################################################################
@@ -711,6 +731,11 @@ def main():
     start = time()
     elapsed = 1 / FRAME_RATE
 
+    #
+    # Bonus: Generate barriers
+    #
+    barrier_segments = generate_barriers()
+
     # While the game has not been closed.
     while not closed() and not (max_score >= MAX_SCORE and state == "next_round" and time() > reset_time):
         if state == "next_round" and time() > reset_time:
@@ -753,6 +778,13 @@ def main():
 
         clear()
         drawImage(background, 0, 0)
+
+        #
+        # Bonus: Draw the pre-generated barriers to the screen
+        #
+        setColor("white")
+        for segment in barrier_segments:
+            line(*segment)
 
         # Draw the player snake if it consists of at least one line segment
         if p1_lost == True:
@@ -797,16 +829,17 @@ def main():
         ##
         ###############################################################################
 
-        #
-        # Part 1: A Moving Dot...
-        #
         if not p1_lost:
+            #
+            # Part 1: A Moving Dot...
+            #
             p1_x += cos(p1_heading) * speed * elapsed
             p1_y += sin(p1_heading) * speed * elapsed
             #
             # Part 2: A Long and Permanent Line
             #
-            p1_queue += [p1_x, p1_y]
+            p1_queue.append(p1_x)
+            p1_queue.append(p1_y)
             #
             # Part 3: A Growing Snake
             #
@@ -828,6 +861,12 @@ def main():
                 #
                 for e_queue in e_queues:
                     if has_collided(p1_x, p1_y, p1_queue[-4], p1_queue[-3], e_queue):
+                        p1_lost = True
+                #
+                # Bonus: Colliding with Barriers
+                #
+                for segments in barrier_segments:
+                    if fastCollides(p1_x, p1_y, p1_queue[-4], p1_queue[-3], segments):
                         p1_lost = True
 
         ###############################################################################
@@ -855,13 +894,18 @@ def main():
 
                 others.pop(i)
 
+                #
+                # Bonus: Add barrier_segments to AI que so that the AI takes the
+                # location of each barrier into account when deciding where to move
+                #
+                extended_p1_queue = []
+                for segments in barrier_segments:
+                    extended_p1_queue += segments
                 # Extend the player's queue to make it harder for the player to cut the
                 # AI off
                 if 'p1_queue' in locals() and len(p1_queue) > 0:
-                    extended_p1_queue = p1_queue + [p1_queue[-2] + cos(p1_heading) * speed * 0.6,
+                    extended_p1_queue += p1_queue + [p1_queue[-2] + cos(p1_heading) * speed * 0.6,
                                                     p1_queue[-1] + sin(p1_heading) * speed * 0.6]
-                else:
-                    extended_p1_queue = []
 
                 angle = e_headings[i] - 0.6 * pi
                 found = False
@@ -920,8 +964,13 @@ def main():
                     if i == j:
                         if fastCollides(e_queues[i][-2], e_queues[i][-1], ex, ey, e_queues[j][:-2]):
                             e_lost[i] = True
-                    else:
-                        if fastCollides(e_queues[i][-2], e_queues[i][-1], ex, ey, e_queues[j]):
+                    elif fastCollides(e_queues[i][-2], e_queues[i][-1], ex, ey, e_queues[j]):
+                        e_lost[i] = True
+                    #
+                    # Bonus: Determine if the AI has crashed into a barrier
+                    #
+                    for segments in barrier_segments:
+                        if fastCollides(e_queues[i][-2], e_queues[i][-1], ex, ey, segments):
                             e_lost[i] = True
 
                 # Determine if the AI has crashed into the player
