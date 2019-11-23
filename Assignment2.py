@@ -37,7 +37,7 @@ def draw_axes():
     # Draw x-axis
     line(0, ORIGIN_Y, WIDTH, ORIGIN_Y)
     for x in range(10, WIDTH, SCALE):
-        # Draw horizontal tick 6 pixels tall
+        # Draw horizontal tick TICK_SIZE pixels tall
         line(x, ORIGIN_Y - TICK_SIZE / 2, x, ORIGIN_Y + TICK_SIZE / 2)
 
         label = x // SCALE - UNITS_X
@@ -48,7 +48,7 @@ def draw_axes():
     # Draw y-axis
     line(ORIGIN_X, 0, ORIGIN_X, HEIGHT)
     for y in range(-HEIGHT, SCALE, SCALE):
-        # Draw vertical tick 6 pixels wide
+        # Draw vertical tick TICK_SIZE pixels wide
         line(ORIGIN_X - TICK_SIZE / 2, -y, ORIGIN_X + TICK_SIZE / 2, -y)
 
         label = y // SCALE + UNITS_Y
