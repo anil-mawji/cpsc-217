@@ -1,3 +1,7 @@
+##
+# CPSC 217 Assignment 3
+# Name: Anil Mawji
+# UCID: 30099809
 #
 #  Viper: A competative variant of Snake
 #
@@ -31,7 +35,7 @@ COUNTDOWN_DURATION = 3  # How long is the countdown between rounds?
 FRAME_RATE = 30  # Target framerate to maintain
 BOUNDARY = [0, 0, 799, 0, 799, 599, 0, 599, 0, 0]  # Line segments for the edges
 
-BARRIER_RANGE = [15, 30]  # Bonus: draw between 15 and 30 random barriers
+BARRIER_RANGE = [15, 25]  # Bonus: draw between 15 and 30 random barriers
 
 # of the screen
 
@@ -644,20 +648,23 @@ def has_collided(p1_x, p1_y, p2_x, p2_y, queue):
 
 
 # Bonus: Draw randomly positioned barriers around the map
-# The position of each barrier is offset at least 150 pixels in both the x and y directions
-# so that the player doesn't spawn on top of a barrier
 #
-# @return barrier_segments a list of lists, where each sublist contains the points for a single barrier
-def generate_barriers():
-    barrier_segments = []
+# @param p1_x      starting x position of player
+# @param p1_y      starting y position of player
+# @return segments a list of lists, where each sublist contains the points for a single barrier
+def generate_barriers(p1_x, p1_y):
+    segments = []
     for i in range(randrange(BARRIER_RANGE[0], BARRIER_RANGE[1] + 1)):
-        # Generate random barrier data
+        # Generate random barrier length between 50 and 100 pixels
         size = randrange(50, 100)
-        x, y = randrange(150, getWidth() - 150), randrange(150, getHeight() - 150)
-        # Decide whether or not the new barrier should be vertical (True) or horizontal (False)
+        # Generate random barrier position
+        # Position is offset at least 50 pixels from the player's initial position
+        # so that the player doesn't spawn on top of a barrier.
+        x, y = randrange(p1_x + 50, getWidth() - 150), randrange(p1_y + 50, getHeight() - 150)
+        # Decide whether or not the new barrier should have a vertical (True) or horizontal (False) orientation
         # by generating a random boolean. Append the points for the new barrier to the list of points
-        barrier_segments.append([x, y, x, y + size] if random() >= 0.5 else [x, y, x + size, y])
-    return barrier_segments
+        segments.append([x, y, x, y + size] if random() >= 0.5 else [x, y, x + size, y])
+    return segments
 
 
 ###############################################################################
@@ -733,7 +740,7 @@ def main():
     #
     # Bonus: Generate barriers
     #
-    barrier_segments = generate_barriers()
+    barrier_segments = generate_barriers(p1_y, p1_x)
 
     # While the game has not been closed.
     while not closed() and not (max_score >= MAX_SCORE and state == "next_round" and time() > reset_time):
@@ -760,6 +767,8 @@ def main():
             e_lengths = [0, 0, 0][:num_ai]
             e_lost = [False, False, False][:num_ai]
             e_plost = [False, False, False][:num_ai]
+
+            barrier_segments = generate_barriers(p1_y, p1_x)
 
             # Compute each AI snake's initial heading
             e_headings = []
@@ -846,7 +855,7 @@ def main():
             #
             # Part 4: Colliding with Walls
             #
-            if p1_x > getWidth() or p1_x < 0 or p1_y > getHeight() or p1_y < 0:
+            if p1_x >= getWidth() or p1_x < 0 or p1_y >= getHeight() or p1_y < 0:
                 p1_lost = True
 
             if len(p1_queue) >= 4:
@@ -898,8 +907,8 @@ def main():
                 # location of each barrier into account when deciding where to move
                 #
                 extended_p1_queue = []
-                for segments in barrier_segments:
-                    extended_p1_queue += segments
+                for segment in barrier_segments:
+                    extended_p1_queue += segment
                 # Extend the player's queue to make it harder for the player to cut the
                 # AI off
                 if 'p1_queue' in locals() and len(p1_queue) > 0:
