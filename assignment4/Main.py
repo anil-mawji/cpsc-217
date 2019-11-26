@@ -9,9 +9,9 @@ from SimpleGraphics import *
 
 WIDTH = getWidth()
 HEIGHT = getHeight()
-BAR_WIDTH = 25
-PADDING_X = 130
+PADDING_X = 150
 PADDING_Y = 75
+BAR_WIDTH = 25
 SPACING = 10
 
 
@@ -26,14 +26,14 @@ def draw_sankey(data):
     pixels_per_unit = num_pixels / total_flow
 
     # Draw source bar
-    rect(PADDING_X, (HEIGHT - total_flow * pixels_per_unit) / 2, BAR_WIDTH, total_flow * pixels_per_unit)
+    rect(130, (HEIGHT - total_flow * pixels_per_unit) / 2, BAR_WIDTH, total_flow * pixels_per_unit)
 
     # Draw destination rectangles
     offset = 0
     for k in data:
         height = float(data[k]) * pixels_per_unit
         rect(WIDTH - PADDING_X, PADDING_Y + offset, BAR_WIDTH, height)
-        text(WIDTH - PADDING_X + BAR_WIDTH * 2, PADDING_Y + offset + height / 2, k)
+        text(WIDTH - PADDING_X + BAR_WIDTH, PADDING_Y + offset + height / 2, k)
         offset += height + SPACING
 
 
