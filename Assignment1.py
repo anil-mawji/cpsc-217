@@ -16,6 +16,7 @@ EYE_HEIGHT = 60
 x = int(input("Enter the x position: ")) - SIZE_X / 2
 y = int(input("Enter the y position: ")) - SIZE_Y / 2
 
+setWindowTitle("Assignment 1")
 # Draw background
 background("deep pink")
 

@@ -32,8 +32,6 @@ DELTA_X = 0.2
 
 
 def draw_axes():
-    # Set background color
-    background("white")
     # Draw x-axis
     line(0, ORIGIN_Y, WIDTH, ORIGIN_Y)
     for x in range(10, WIDTH, SCALE):
@@ -61,6 +59,7 @@ def draw_axes():
 #
 # @param expression equation of the function to be drawn
 # @param color      the color of the function being drawn
+# @return           None
 def draw_function(expression, color):
     # Set initial x value at the left side of x-axis
     x = -UNITS_X
@@ -97,6 +96,7 @@ def get_screen_coordinates(px, py):
 # @param current_point the current point being checked
 # @param next_point    the point on the graph that follows current_point
 # @param color         the color of the function being drawn
+# @return              None
 def draw_extrema(last_point, current_point, next_point, color):
     slope_last = (current_point[1] - last_point[1]) / DELTA_X
     slope_next = (next_point[1] - current_point[1]) / DELTA_X
@@ -118,6 +118,9 @@ def draw_extrema(last_point, current_point, next_point, color):
 
 
 def main():
+    setWindowTitle("Assignment 2")
+    # Set background color
+    background("white")
     # Draw x and y axis
     draw_axes()
     # Get input from user
