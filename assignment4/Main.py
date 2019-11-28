@@ -1,10 +1,3 @@
-##
-# CPSC 217 Assignment 4
-# Name: Anil Mawji
-# UCID: 30099809
-#
-# Program description:
-
 import sys
 import math
 from SimpleGraphics import *
@@ -18,7 +11,7 @@ PADDING_Y = 75
 SPACING_X = 10
 SPACING_Y = 10
 BAR_WIDTH = 25
-# Colors are taken from https://sashat.me/2017/01/11/list-of-20-simple-distinct-colors/
+# Colors taken from https://sashat.me/2017/01/11/list-of-20-simple-distinct-colors/
 COLORS = [
     (230, 25, 75), (60, 180, 75), (255, 225, 25), (0, 130, 200), (245, 130, 48), (145, 30, 180), (70, 240, 240),
     (240, 50, 230), (210, 245, 60), (250, 190, 190), (0, 128, 128), (230, 190, 255), (170, 110, 40), (255, 250, 200),
@@ -37,24 +30,27 @@ def draw_sankey(data):
     num_pixels = HEIGHT - PADDING_Y * 2 - (len(data) - 1) * SPACING_Y
     pixels_per_unit = num_pixels / total_flow
 
-    # Draw source bar
+    # Draw the source bar
     source_x = PADDING_X + SPACING_X
     source_y = (HEIGHT - total_flow * pixels_per_unit) / 2
     source_height = total_flow * pixels_per_unit
     setColor(*SOURCE_COLOR)
     rect(source_x, source_y, BAR_WIDTH, source_height)
 
-    # Draw border around source bar
+    # Draw a border around the source bar
     setColor("black")
     line(source_x, source_y, source_x + BAR_WIDTH, source_y)
     line(source_x, source_y, source_x, source_y + source_height)
     line(source_x, source_y + source_height, source_x + BAR_WIDTH, source_y + source_height)
 
+    # Calculate the position of the destination bar
     destination_x = WIDTH - PADDING_X
     destination_y = PADDING_Y
 
     for k in data:
+        # Get the color of the destination bar
         color = COLORS[list(data).index(k) + list(COLORS).index(SOURCE_COLOR) + 1]
+        # Calculate the height of the destination bar
         height = data[k] * pixels_per_unit
 
         # Draw destination bar
@@ -66,31 +62,31 @@ def draw_sankey(data):
         text(destination_x + BAR_WIDTH + SPACING_X, destination_y + height / 2, k, "w")
 
         # Draw body
-        offset_y = 0
-        increment = (source_y - destination_y) / (destination_x - source_x - BAR_WIDTH)
         range_x = destination_x - source_x - BAR_WIDTH
         for x in range(range_x):
+            offset_y = (math.sin(x / range_x * math.pi - math.pi / 2) + 1) / 2 * (source_y - destination_y)
+            # Calculate the color of the current line being drawn
             setColor(SOURCE_COLOR[0] + (x / range_x) * (color[0] - SOURCE_COLOR[0]),
                      SOURCE_COLOR[1] + (x / range_x) * (color[1] - SOURCE_COLOR[1]),
                      SOURCE_COLOR[2] + (x / range_x) * (color[2] - SOURCE_COLOR[2]))
+            # Draw the current line of the body
             line(source_x + BAR_WIDTH + x, source_y - offset_y,
                  source_x + BAR_WIDTH + x, source_y + height - offset_y)
-            # p = p * pi - pi / 2
-            # p = (sin(p) + 1) / 2
-            offset_y += increment
+            # Draw the top border of the body
+            setColor("black")
+            line(source_x + BAR_WIDTH + x, source_y - offset_y,
+                 source_x + BAR_WIDTH + x + 1, source_y - offset_y)
+            # Draw the bottom border of the body
+            line(source_x + BAR_WIDTH + x, source_y - offset_y + height,
+                 source_x + BAR_WIDTH + x + 1, source_y - offset_y + height)
 
+        # Draw border around destination bar
         setColor("black")
-        # Top border line of body
-        line(source_x + BAR_WIDTH, source_y, destination_x, destination_y)
-        # Bottom border line of body
-        line(source_x + BAR_WIDTH, source_y + height, destination_x, destination_y + height)
-        # Top destination border line
         line(destination_x, destination_y, destination_x + BAR_WIDTH, destination_y)
-        # Right destination border line
         line(destination_x + BAR_WIDTH, destination_y, destination_x + BAR_WIDTH, destination_y + height)
-        # Bottom destination border line
         line(destination_x, destination_y + height, destination_x + BAR_WIDTH, destination_y + height)
 
+        # Increment the y values to prepare for drawing the next bar
         source_y += height
         destination_y += height + SPACING_Y
 
