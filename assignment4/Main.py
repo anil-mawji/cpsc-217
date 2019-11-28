@@ -2,7 +2,7 @@ import sys
 import math
 from SimpleGraphics import *
 
-sys.argv = ['Main.py', 'MiniGolf.txt']
+sys.argv = ['Main.py', 'Baseball.txt']
 
 WIDTH = getWidth()
 HEIGHT = getHeight()
@@ -17,7 +17,7 @@ COLORS = [
     (240, 50, 230), (210, 245, 60), (250, 190, 190), (0, 128, 128), (230, 190, 255), (170, 110, 40), (255, 250, 200),
     (128, 0, 0), (170, 255, 195), (128, 128, 0), (255, 215, 180), (0, 0, 128), (128, 128, 128), (255, 255, 255)
 ]
-SOURCE_COLOR = COLORS[1]
+DEFAULT_SOURCE_COLOR = COLORS[1]
 
 
 # Draws a Sankey diagram of a given data set
@@ -25,8 +25,15 @@ SOURCE_COLOR = COLORS[1]
 # @param data
 # @return
 def draw_sankey(data):
+    setColor("black")
+    setFont("Calibri", "20")
+    text(WIDTH / 2, 50, data["Title"])
+
+    setFont("Calibri")
+    text(PADDING_X, HEIGHT / 2, data["Source"][0], "e")
+
     # Calculate bar scale
-    total_flow = sum(value[0] for value in data.values())
+    total_flow = sum(value[0] for value in list(data.values())[2:])
     num_pixels = HEIGHT - PADDING_Y * 2 - (len(data) - 1) * SPACING_Y
     pixels_per_unit = num_pixels / total_flow
 
@@ -34,7 +41,8 @@ def draw_sankey(data):
     source_x = PADDING_X + SPACING_X
     source_y = (HEIGHT - total_flow * pixels_per_unit) / 2
     source_height = total_flow * pixels_per_unit
-    setColor(*SOURCE_COLOR)
+    source_color = data["Source"][1]
+    setColor(*source_color)
     rect(source_x, source_y, BAR_WIDTH, source_height)
 
     # Draw a border around the source bar
@@ -47,7 +55,7 @@ def draw_sankey(data):
     destination_x = WIDTH - PADDING_X
     destination_y = PADDING_Y
 
-    for k in data:
+    for k in dict(list(data.items())[2:]):
         # Calculate the color of the destination bar
         color = data[k][1]
         # Calculate the height of the destination bar
@@ -62,9 +70,9 @@ def draw_sankey(data):
         for x in range(range_x):
             offset_y = (math.sin(x / range_x * math.pi - math.pi / 2) + 1) / 2 * (source_y - destination_y)
             # Calculate the color of the current line being drawn
-            setColor(SOURCE_COLOR[0] + (x / range_x) * (color[0] - SOURCE_COLOR[0]),
-                     SOURCE_COLOR[1] + (x / range_x) * (color[1] - SOURCE_COLOR[1]),
-                     SOURCE_COLOR[2] + (x / range_x) * (color[2] - SOURCE_COLOR[2]))
+            setColor(source_color[0] + (x / range_x) * (color[0] - source_color[0]),
+                     source_color[1] + (x / range_x) * (color[1] - source_color[1]),
+                     source_color[2] + (x / range_x) * (color[2] - source_color[2]))
             # Draw the current line of the body
             line(source_x + BAR_WIDTH + x, source_y - offset_y,
                  source_x + BAR_WIDTH + x, source_y + height - offset_y)
@@ -95,20 +103,20 @@ def draw_sankey(data):
 # @param file
 # @return data
 def collect_data(file):
-    setColor("black")
-    setFont("Calibri", "20")
-    text(WIDTH / 2, 50, file.readline())
-
-    setFont("Calibri")
-    text(PADDING_X, HEIGHT / 2, file.readline(), "e")
-
     data = {}
-    ln = file.readline()
-    while ln:
-        line_info = ln.split(",")
-        data[line_info[0]] = [float(line_info[1]), COLORS[len(data) + list(COLORS).index(SOURCE_COLOR) + 1]]\
-            if len(line_info) < 5 else [float(line_info[1]), list(map(float, line_info[2:5]))]
-        ln = file.readline()
+    for i, ln in enumerate(file):
+        ln = ln.split(",")
+        if i == 0:
+            data["Title"] = ln[0].rstrip()
+        elif i == 1:
+            data["Source"] = [
+                ln[0].rstrip(), DEFAULT_SOURCE_COLOR
+            ] if len(ln) < 4 else [ln[0].rstrip(), list(map(float, ln[1:4]))]
+        else:
+            data[ln[0]] = [
+                float(ln[1]), COLORS[i - 2 + list(COLORS).index(DEFAULT_SOURCE_COLOR) + 1]
+            ] if len(ln) < 5 else [float(ln[1]), list(map(float, ln[2:5]))]
+    print(data)
     return data
 
 
@@ -118,7 +126,6 @@ def main():
 
     with open(sys.argv[1]) as file:
         data = collect_data(file)
-        print(data)
         draw_sankey(data)
     file.close()
 
