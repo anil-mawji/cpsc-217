@@ -109,13 +109,11 @@ def collect_data(file):
         if i == 0:
             data["Title"] = ln[0].rstrip()
         elif i == 1:
-            data["Source"] = [
-                ln[0].rstrip(), DEFAULT_SOURCE_COLOR
-            ] if len(ln) < 4 else [ln[0].rstrip(), list(map(float, ln[1:4]))]
+            data["Source"] = ln[0].rstrip(), DEFAULT_SOURCE_COLOR\
+                if len(ln) < 4 else ln[0].rstrip(), list(map(float, ln[1:4]))
         else:
-            data[ln[0]] = [
-                float(ln[1]), COLORS[i - 2 + list(COLORS).index(DEFAULT_SOURCE_COLOR) + 1]
-            ] if len(ln) < 5 else [float(ln[1]), list(map(float, ln[2:5]))]
+            data[ln[0]] = float(ln[1]), COLORS[i - 2 + list(COLORS).index(DEFAULT_SOURCE_COLOR) + 1]\
+                if len(ln) < 5 else float(ln[1]), list(map(float, ln[2:5]))
     print(data)
     return data
 
