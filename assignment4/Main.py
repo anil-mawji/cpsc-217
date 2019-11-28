@@ -2,7 +2,7 @@ import sys
 import math
 from SimpleGraphics import *
 
-sys.argv = ['Main.py', 'Baseball.txt']
+sys.argv = ['Main.py', 'MiniGolf.txt']
 
 WIDTH = getWidth()
 HEIGHT = getHeight()
@@ -26,7 +26,7 @@ SOURCE_COLOR = COLORS[1]
 # @return
 def draw_sankey(data):
     # Calculate bar scale
-    total_flow = sum(flow for flow in data.values())
+    total_flow = sum(value[0] for value in data.values())
     num_pixels = HEIGHT - PADDING_Y * 2 - (len(data) - 1) * SPACING_Y
     pixels_per_unit = num_pixels / total_flow
 
@@ -48,18 +48,14 @@ def draw_sankey(data):
     destination_y = PADDING_Y
 
     for k in data:
-        # Get the color of the destination bar
-        color = COLORS[list(data).index(k) + list(COLORS).index(SOURCE_COLOR) + 1]
+        # Calculate the color of the destination bar
+        color = data[k][1]
         # Calculate the height of the destination bar
-        height = data[k] * pixels_per_unit
+        height = data[k][0] * pixels_per_unit
 
         # Draw destination bar
         setColor(*color)
         rect(destination_x, destination_y, BAR_WIDTH, height)
-
-        # Draw destination text
-        setColor("black")
-        text(destination_x + BAR_WIDTH + SPACING_X, destination_y + height / 2, k, "w")
 
         # Draw body
         range_x = destination_x - source_x - BAR_WIDTH
@@ -72,16 +68,19 @@ def draw_sankey(data):
             # Draw the current line of the body
             line(source_x + BAR_WIDTH + x, source_y - offset_y,
                  source_x + BAR_WIDTH + x, source_y + height - offset_y)
-            # Draw the top border of the body
+            # Draw a border pixel above the current line
             setColor("black")
             line(source_x + BAR_WIDTH + x, source_y - offset_y,
                  source_x + BAR_WIDTH + x + 1, source_y - offset_y)
-            # Draw the bottom border of the body
+            # Draw a border pixel below the current line
             line(source_x + BAR_WIDTH + x, source_y - offset_y + height,
                  source_x + BAR_WIDTH + x + 1, source_y - offset_y + height)
 
-        # Draw border around destination bar
+        # Draw destination text
         setColor("black")
+        text(destination_x + BAR_WIDTH + SPACING_X, destination_y + height / 2, k, "w")
+
+        # Draw border around destination bar
         line(destination_x, destination_y, destination_x + BAR_WIDTH, destination_y)
         line(destination_x + BAR_WIDTH, destination_y, destination_x + BAR_WIDTH, destination_y + height)
         line(destination_x, destination_y + height, destination_x + BAR_WIDTH, destination_y + height)
@@ -107,7 +106,8 @@ def collect_data(file):
     ln = file.readline()
     while ln:
         line_info = ln.split(",")
-        data[line_info[0]] = float(line_info[1])
+        data[line_info[0]] = [float(line_info[1]), COLORS[len(data) + list(COLORS).index(SOURCE_COLOR) + 1]]\
+            if len(line_info) < 5 else [float(line_info[1]), list(map(float, line_info[2:5]))]
         ln = file.readline()
     return data
 
@@ -117,8 +117,10 @@ def main():
     background("light gray")
 
     with open(sys.argv[1]) as file:
-        draw_sankey(collect_data(file))
-        file.close()
+        data = collect_data(file)
+        print(data)
+        draw_sankey(data)
+    file.close()
 
 
 if __name__ == '__main__':
