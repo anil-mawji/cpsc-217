@@ -22,7 +22,8 @@ BAR_WIDTH = 25
 COLORS = [
     (230, 25, 75), (60, 180, 75), (255, 225, 25), (0, 130, 200), (245, 130, 48), (145, 30, 180), (70, 240, 240),
     (240, 50, 230), (210, 245, 60), (250, 190, 190), (0, 128, 128), (230, 190, 255), (170, 110, 40), (255, 250, 200),
-    (128, 0, 0), (170, 255, 195), (128, 128, 0), (255, 215, 180), (0, 0, 128), (128, 128, 128), (255, 255, 255)]
+    (128, 0, 0), (170, 255, 195), (128, 128, 0), (255, 215, 180), (0, 0, 128), (128, 128, 128), (255, 255, 255)
+]
 SOURCE_COLOR = COLORS[1]
 
 
@@ -43,14 +44,14 @@ def draw_sankey(data):
     setColor(*SOURCE_COLOR)
     rect(source_x, source_y, BAR_WIDTH, source_height)
 
-    destination_x = WIDTH - PADDING_X
-    destination_y = PADDING_Y
-
     # Draw border around source bar
     setColor("black")
     line(source_x, source_y, source_x + BAR_WIDTH, source_y)
     line(source_x, source_y, source_x, source_y + source_height)
     line(source_x, source_y + source_height, source_x + BAR_WIDTH, source_y + source_height)
+
+    destination_x = WIDTH - PADDING_X
+    destination_y = PADDING_Y
 
     for k in data:
         color = COLORS[list(data).index(k) + list(COLORS).index(SOURCE_COLOR) + 1]
