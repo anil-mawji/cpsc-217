@@ -64,18 +64,19 @@ def draw_sankey(data):
     destination_y = PADDING_Y
 
     for k in dict(list(data.items())[2:]):  # Trim title and source from data
-        # Calculate the color of the destination bar
+        # Retrieve the color of the destination bar
         color = data[k][1]
         # Calculate the height of the destination bar
         height = data[k][0] * pixels_per_unit
 
-        # Draw destination bar
+        # Draw the destination bar
         setColor(*color)
         rect(destination_x, destination_y, BAR_WIDTH, height)
 
         # Draw body
         range_x = destination_x - source_x - BAR_WIDTH
         for x in range(range_x):
+            # Calculate the vertical offset of the current line being drawn
             offset_y = (math.sin(x / range_x * math.pi - math.pi / 2) + 1) / 2 * (source_y - destination_y)
             # Calculate the color of the current line being drawn
             setColor(source_color[0] + (x / range_x) * (color[0] - source_color[0]),
