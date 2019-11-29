@@ -1,8 +1,15 @@
+##
+# CPSC 217 Assignment 4
+# Name: Anil Mawji
+# UCID: 30099809
+#
+# Program Description: Draws a Sankey diagram to the screen using data from external an text file
+
 import sys
 import math
 from SimpleGraphics import *
 
-sys.argv = ['Main.py', 'Baseball.txt']
+sys.argv = ['Assignment4.py', 'MiniGolf.txt']
 
 WIDTH = getWidth()
 HEIGHT = getHeight()
@@ -20,20 +27,13 @@ COLORS = [
 DEFAULT_SOURCE_COLOR = COLORS[1]
 
 
-# Draws a Sankey diagram of a given data set
+# Draws a new Sankey diagram the screen
 #
-# @param data
-# @return
+# @param data  a dictionary returned from collect_data()
+# @return None
 def draw_sankey(data):
-    setColor("black")
-    setFont("Calibri", "20")
-    text(WIDTH / 2, 50, data["Title"])
-
-    setFont("Calibri")
-    text(PADDING_X, HEIGHT / 2, data["Source"][0], "e")
-
-    # Calculate bar scale
-    total_flow = sum(value[0] for value in list(data.values())[2:])
+    # Calculate the bar scale
+    total_flow = sum(value[0] for value in list(data.values())[2:])  # Trim title and source from data
     num_pixels = HEIGHT - PADDING_Y * 2 - (len(data) - 1) * SPACING_Y
     pixels_per_unit = num_pixels / total_flow
 
@@ -51,11 +51,19 @@ def draw_sankey(data):
     line(source_x, source_y, source_x, source_y + source_height)
     line(source_x, source_y + source_height, source_x + BAR_WIDTH, source_y + source_height)
 
+    # Draw the source bar text
+    setFont("Calibri")
+    text(PADDING_X, HEIGHT / 2, data["Source"][0], "e")
+
+    # Draw the title
+    setFont("Calibri", "20")
+    text(WIDTH / 2, 50, data["Title"])
+
     # Calculate the position of the destination bar
     destination_x = WIDTH - PADDING_X
     destination_y = PADDING_Y
 
-    for k in dict(list(data.items())[2:]):
+    for k in dict(list(data.items())[2:]):  # Trim title and source from data
         # Calculate the color of the destination bar
         color = data[k][1]
         # Calculate the height of the destination bar
@@ -98,23 +106,25 @@ def draw_sankey(data):
         destination_y += height + SPACING_Y
 
 
+# Gathers data for drawing a Sankey diagram from a text file.
+# Data is read into the program sequentially.
 #
-#
-# @param file
-# @return data
+# @param file  the file containing the data
+# @return data a dictionary containing all the necessary data to draw a Sankey diagram
 def collect_data(file):
-    data = {}
+    data = {"Title": file.readline().rstrip()}
     for i, ln in enumerate(file):
         ln = ln.split(",")
         if i == 0:
-            data["Title"] = ln[0].rstrip()
-        elif i == 1:
-            data["Source"] = ln[0].rstrip(), DEFAULT_SOURCE_COLOR\
-                if len(ln) < 4 else ln[0].rstrip(), list(map(float, ln[1:4]))
+            # Source data is a list that holds the source title and a color
+            # If 3 more numbers for the color are not found in the line, use the default source color
+            data["Source"] = [ln[0].rstrip(), DEFAULT_SOURCE_COLOR]\
+                if len(ln) < 4 else [ln[0].rstrip(), list(map(float, ln[1:4]))]
         else:
-            data[ln[0]] = float(ln[1]), COLORS[i - 2 + list(COLORS).index(DEFAULT_SOURCE_COLOR) + 1]\
-                if len(ln) < 5 else float(ln[1]), list(map(float, ln[2:5]))
-    print(data)
+            # Destination data is a list that holds the flow value and a color
+            # If 3 more numbers for the color are not found in the line, use the default destination color
+            data[ln[0]] = [float(ln[1]), COLORS[i + list(COLORS).index(DEFAULT_SOURCE_COLOR)]]\
+                if len(ln) < 5 else [float(ln[1]), list(map(float, ln[2:5]))]
     return data
 
 
