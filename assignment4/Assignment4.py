@@ -3,7 +3,7 @@
 # Name: Anil Mawji
 # UCID: 30099809
 #
-# Program Description: Draws a Sankey diagram to the screen using data from external an text file
+# Program Description: Draws a Sankey diagram to the screen using data from an external text file
 
 import sys
 import math
@@ -51,13 +51,13 @@ def draw_sankey(data):
     line(source_x, source_y, source_x, source_y + source_height)
     line(source_x, source_y + source_height, source_x + BAR_WIDTH, source_y + source_height)
 
-    # Draw the source bar text
-    setFont("Calibri")
-    text(PADDING_X, HEIGHT / 2, data["Source"][0], "e")
-
     # Draw the title
     setFont("Calibri", "20")
     text(WIDTH / 2, 50, data["Title"])
+
+    # Draw the source bar text
+    setFont("Calibri")
+    text(PADDING_X, HEIGHT / 2, data["Source"][0], "e")
 
     # Calculate the position of the destination bar
     destination_x = WIDTH - PADDING_X
