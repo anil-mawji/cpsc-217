@@ -59,14 +59,13 @@ def draw_axes():
 #
 # @param expression equation of the function to be drawn
 # @param color      the color of the function being drawn
-# @return           None
+# @return None
 def draw_function(expression, color):
     # Set initial x value at the left side of x-axis
     x = -UNITS_X
     # Stores the x and y values of the previously calculated point
     last_pt = x, eval(expression)
     # Plot points
-
     while x < UNITS_X:
         current_pt = x, eval(expression)
         # Unpack the coordinates of the last and the new points
@@ -83,9 +82,9 @@ def draw_function(expression, color):
 
 # Converts x and y values to their corresponding position on the screen
 #
-# @param px     an x value on a graph
-# @param py     the y value calculated from the expression
-# @return the position of px and py on the screen
+# @param px an x value on a graph
+# @param py the y value calculated from the expression
+# @return   the position of px and py on the screen
 def get_screen_coordinates(px, py):
     return ORIGIN_X + px * SCALE, ORIGIN_Y - py * SCALE
 
@@ -96,7 +95,7 @@ def get_screen_coordinates(px, py):
 # @param current_point the current point being checked
 # @param next_point    the point on the graph that follows current_point
 # @param color         the color of the function being drawn
-# @return              None
+# @return None
 def draw_extrema(last_point, current_point, next_point, color):
     slope_last = (current_point[1] - last_point[1]) / DELTA_X
     slope_next = (next_point[1] - current_point[1]) / DELTA_X
