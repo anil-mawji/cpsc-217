@@ -1,2 +1,2 @@
-# python-exercises
-Homework for CPSC 217
+# cpsc-homework
+Homework for class
