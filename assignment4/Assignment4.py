@@ -9,8 +9,6 @@ import sys
 import math
 from SimpleGraphics import *
 
-sys.argv = ['Assignment4.py', 'MiniGolf.txt']
-
 WIDTH = getWidth()
 HEIGHT = getHeight()
 PADDING_X = 150
@@ -133,6 +131,9 @@ def main():
     setWindowTitle("Assignment 4")
     background("light gray")
 
+    if len(sys.argv) != 2:
+        print("Incorrect command line arguments were given.\nUsage:", sys.argv[0], "<input name>")
+        quit()
     with open(sys.argv[1]) as file:
         data = collect_data(file)
         draw_sankey(data)
