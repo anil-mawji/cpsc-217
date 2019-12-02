@@ -80,7 +80,7 @@ def draw_sankey(data):
             setColor(source_color[0] + (x / range_x) * (color[0] - source_color[0]),
                      source_color[1] + (x / range_x) * (color[1] - source_color[1]),
                      source_color[2] + (x / range_x) * (color[2] - source_color[2]))
-            # Draw the current line of the body
+            # Draw the current line
             line(source_x + BAR_WIDTH + x, source_y - offset_y,
                  source_x + BAR_WIDTH + x, source_y + height - offset_y)
             # Draw a border pixel above the current line
@@ -91,11 +91,11 @@ def draw_sankey(data):
             line(source_x + BAR_WIDTH + x, source_y - offset_y + height,
                  source_x + BAR_WIDTH + x + 1, source_y - offset_y + height)
 
-        # Draw destination text
+        # Draw the destination text
         setColor("black")
         text(destination_x + BAR_WIDTH + SPACING_X, destination_y + height / 2, k, "w")
 
-        # Draw border around destination bar
+        # Draw a border around destination bar
         line(destination_x, destination_y, destination_x + BAR_WIDTH, destination_y)
         line(destination_x + BAR_WIDTH, destination_y, destination_x + BAR_WIDTH, destination_y + height)
         line(destination_x, destination_y + height, destination_x + BAR_WIDTH, destination_y + height)
@@ -116,7 +116,7 @@ def collect_data(file):
         ln = ln.split(",")
         if i == 0:
             # Source data is a list that holds the source title and a color
-            # If 3 more numbers for the color are not found in the line, use the default source color
+            # If 3 more numbers for the color arenot found in the line, use the default source color
             data["Source"] = [ln[0].rstrip(), DEFAULT_SOURCE_COLOR]\
                 if len(ln) < 4 else [ln[0].rstrip(), list(map(float, ln[1:4]))]
         else:
@@ -130,14 +130,23 @@ def collect_data(file):
 def main():
     setWindowTitle("Assignment 4")
     background("light gray")
+    file_name = None
 
-    if len(sys.argv) != 2:
-        print("Incorrect command line arguments were given.\nUsage:", sys.argv[0], "<input name>")
+    # No command line arguments were provided
+    if len(sys.argv) == 1:
+        file_name = input("Enter the name of the file: ")
+    # A command line argument was provided
+    elif len(sys.argv) == 2:
+        file_name = sys.argv[1]
+    elif len(sys.argv) > 2:
+        print("Error: Too many command line arguments were provided.\nUsage:", sys.argv[0], "<file name>")
         quit()
-    with open(sys.argv[1]) as file:
-        data = collect_data(file)
-        draw_sankey(data)
-    file.close()
+    try:
+        file = open(file_name)
+        draw_sankey(collect_data(file))
+        file.close()
+    except FileNotFoundError:
+        print("Error: A file with that name does not exist.")
 
 
 if __name__ == '__main__':
