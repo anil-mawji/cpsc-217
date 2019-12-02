@@ -63,23 +63,22 @@ def draw_sankey(data):
 
     for k in dict(list(data.items())[2:]):  # Trim title and source from data
         # Retrieve the color of the destination bar
-        color = data[k][1]
+        destination_color = data[k][1]
         # Calculate the height of the destination bar
         height = data[k][0] * pixels_per_unit
-
         # Draw the destination bar
-        setColor(*color)
+        setColor(*destination_color)
         rect(destination_x, destination_y, BAR_WIDTH, height)
 
-        # Draw body
+        # Draw the body of the diagram
         range_x = destination_x - source_x - BAR_WIDTH
         for x in range(range_x):
             # Calculate the vertical offset of the current line being drawn
             offset_y = (math.sin(x / range_x * math.pi - math.pi / 2) + 1) / 2 * (source_y - destination_y)
             # Calculate the color of the current line being drawn
-            setColor(source_color[0] + (x / range_x) * (color[0] - source_color[0]),
-                     source_color[1] + (x / range_x) * (color[1] - source_color[1]),
-                     source_color[2] + (x / range_x) * (color[2] - source_color[2]))
+            setColor(source_color[0] + (x / range_x) * (destination_color[0] - source_color[0]),
+                     source_color[1] + (x / range_x) * (destination_color[1] - source_color[1]),
+                     source_color[2] + (x / range_x) * (destination_color[2] - source_color[2]))
             # Draw the current line
             line(source_x + BAR_WIDTH + x, source_y - offset_y,
                  source_x + BAR_WIDTH + x, source_y + height - offset_y)
@@ -116,7 +115,7 @@ def collect_data(file):
         ln = ln.split(",")
         if i == 0:
             # Source data is a list that holds the source title and a color
-            # If 3 more numbers for the color arenot found in the line, use the default source color
+            # If 3 more numbers for the color are not found in the line, use the default source color
             data["Source"] = [ln[0].rstrip(), DEFAULT_SOURCE_COLOR]\
                 if len(ln) < 4 else [ln[0].rstrip(), list(map(float, ln[1:4]))]
         else:
