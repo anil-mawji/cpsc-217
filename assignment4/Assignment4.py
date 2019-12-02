@@ -12,7 +12,7 @@ from SimpleGraphics import *
 WIDTH = getWidth()
 HEIGHT = getHeight()
 PADDING_X = 150
-PADDING_Y = 75
+PADDING_Y = 75  # (HEIGHT - 450) / 2 == 75
 SPACING_X = 10
 SPACING_Y = 10
 BAR_WIDTH = 25
@@ -27,7 +27,7 @@ DEFAULT_SOURCE_COLOR = COLORS[1]
 
 # Draws a new Sankey diagram the screen
 #
-# @param data  a dictionary returned from collect_data()
+# @param data  a dictionary containing destination names as keys and amounts of flow as values
 # @return None
 def draw_sankey(data):
     # Calculate the bar scale
@@ -109,7 +109,7 @@ def draw_sankey(data):
 # Data is read into the program sequentially.
 #
 # @param file  the file containing the data
-# @return data a dictionary containing all the necessary data to draw a Sankey diagram
+# @return data a dictionary containing destination names as keys and amounts of flow as values
 def collect_data(file):
     data = {"Title": file.readline().rstrip()}
     for i, ln in enumerate(file):
@@ -143,10 +143,14 @@ def main():
         quit()
     try:
         file = open(file_name)
-        draw_sankey(collect_data(file))
+        data = collect_data(file)
+        print(data)
+        draw_sankey(data)
         file.close()
     except FileNotFoundError:
         print("Error: A file with that name does not exist.")
+    except IOError:
+        print("Error: An error occurred while opening the file.")
 
 
 if __name__ == '__main__':
