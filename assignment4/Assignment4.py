@@ -12,7 +12,7 @@ from SimpleGraphics import *
 WIDTH = getWidth()
 HEIGHT = getHeight()
 PADDING_X = 150
-PADDING_Y = 75  # (HEIGHT - 450) / 2 == 75
+PADDING_Y = 75
 SPACING_X = 10
 SPACING_Y = 10
 BAR_WIDTH = 25
@@ -30,7 +30,7 @@ DEFAULT_SOURCE_COLOR = COLORS[1]
 # @param data  a dictionary containing destination names as keys and amounts of flow as values
 # @return None
 def draw_sankey(data):
-    # Calculate the bar scale
+    # Calculate the bar info
     total_flow = sum(value[0] for value in list(data.values())[2:])  # Trim title and source from data
     num_pixels = HEIGHT - PADDING_Y * 2 - (len(data) - 1) * SPACING_Y
     pixels_per_unit = num_pixels / total_flow
@@ -52,56 +52,55 @@ def draw_sankey(data):
     # Draw the title
     setFont("Calibri", "20")
     text(WIDTH / 2, 50, data["Title"])
-
     # Draw the source bar text
     setFont("Calibri")
     text(PADDING_X, HEIGHT / 2, data["Source"][0], "e")
 
     # Calculate the position of the destination bar
-    destination_x = WIDTH - PADDING_X
-    destination_y = PADDING_Y
+    dest_x = WIDTH - PADDING_X
+    dest_y = PADDING_Y
 
     for k in dict(list(data.items())[2:]):  # Trim title and source from data
         # Retrieve the color of the destination bar
-        destination_color = data[k][1]
+        dest_color = data[k][1]
         # Calculate the height of the destination bar
-        height = data[k][0] * pixels_per_unit
+        dest_height = data[k][0] * pixels_per_unit
         # Draw the destination bar
-        setColor(*destination_color)
-        rect(destination_x, destination_y, BAR_WIDTH, height)
+        setColor(*dest_color)
+        rect(dest_x, dest_y, BAR_WIDTH, dest_height)
 
         # Draw the body of the diagram
-        range_x = destination_x - source_x - BAR_WIDTH
+        range_x = dest_x - source_x - BAR_WIDTH
         for x in range(range_x):
             # Calculate the vertical offset of the current line being drawn
-            offset_y = (math.sin(x / range_x * math.pi - math.pi / 2) + 1) / 2 * (source_y - destination_y)
+            offset_y = (math.sin(x / range_x * math.pi - math.pi / 2) + 1) / 2 * (source_y - dest_y)
             # Calculate the color of the current line being drawn
-            setColor(source_color[0] + (x / range_x) * (destination_color[0] - source_color[0]),
-                     source_color[1] + (x / range_x) * (destination_color[1] - source_color[1]),
-                     source_color[2] + (x / range_x) * (destination_color[2] - source_color[2]))
+            setColor(source_color[0] + (x / range_x) * (dest_color[0] - source_color[0]),
+                     source_color[1] + (x / range_x) * (dest_color[1] - source_color[1]),
+                     source_color[2] + (x / range_x) * (dest_color[2] - source_color[2]))
             # Draw the current line
             line(source_x + BAR_WIDTH + x, source_y - offset_y,
-                 source_x + BAR_WIDTH + x, source_y + height - offset_y)
+                 source_x + BAR_WIDTH + x, source_y + dest_height - offset_y)
             # Draw a border pixel above the current line
             setColor("black")
             line(source_x + BAR_WIDTH + x, source_y - offset_y,
                  source_x + BAR_WIDTH + x + 1, source_y - offset_y)
             # Draw a border pixel below the current line
-            line(source_x + BAR_WIDTH + x, source_y - offset_y + height,
-                 source_x + BAR_WIDTH + x + 1, source_y - offset_y + height)
+            line(source_x + BAR_WIDTH + x, source_y - offset_y + dest_height,
+                 source_x + BAR_WIDTH + x + 1, source_y - offset_y + dest_height)
 
         # Draw the destination text
         setColor("black")
-        text(destination_x + BAR_WIDTH + SPACING_X, destination_y + height / 2, k, "w")
+        text(dest_x + BAR_WIDTH + SPACING_X, dest_y + dest_height / 2, k, "w")
 
         # Draw a border around destination bar
-        line(destination_x, destination_y, destination_x + BAR_WIDTH, destination_y)
-        line(destination_x + BAR_WIDTH, destination_y, destination_x + BAR_WIDTH, destination_y + height)
-        line(destination_x, destination_y + height, destination_x + BAR_WIDTH, destination_y + height)
+        line(dest_x, dest_y, dest_x + BAR_WIDTH, dest_y)
+        line(dest_x + BAR_WIDTH, dest_y, dest_x + BAR_WIDTH, dest_y + dest_height)
+        line(dest_x, dest_y + dest_height, dest_x + BAR_WIDTH, dest_y + dest_height)
 
         # Increment the y values to prepare for drawing the next bar
-        source_y += height
-        destination_y += height + SPACING_Y
+        source_y += dest_height
+        dest_y += dest_height + SPACING_Y
 
 
 # Gathers data for drawing a Sankey diagram from a text file.
@@ -110,6 +109,7 @@ def draw_sankey(data):
 # @param file  the file containing the data
 # @return data a dictionary containing destination names as keys and amounts of flow as values
 def collect_data(file):
+    # Insert the title as the first key in the dictionary
     data = {"Title": file.readline().rstrip()}
     for i, ln in enumerate(file):
         ln = ln.split(",")
@@ -129,27 +129,23 @@ def collect_data(file):
 def main():
     setWindowTitle("Assignment 4")
     background("light gray")
-    file_name = None
+    # Get file name from command line arguments if one exists, otherwise ask the user for the file name directly
+    file_name = sys.argv[1] if len(sys.argv) == 2\
+        else input("Enter the name of the file: ") if len(sys.argv) == 1 else None
 
-    # No command line arguments were provided
-    if len(sys.argv) == 1:
-        file_name = input("Enter the name of the file: ")
-    # A command line argument was provided
-    elif len(sys.argv) == 2:
-        file_name = sys.argv[1]
-    elif len(sys.argv) > 2:
+    if file_name:
+        try:
+            file = open(file_name)
+            data = collect_data(file)
+            print(data)
+            draw_sankey(data)
+            file.close()
+        except FileNotFoundError:
+            print("Error: A file with that name does not exist.")
+        except IOError:
+            print("Error: An error occurred while opening the file.")
+    else:
         print("Error: Too many command line arguments were provided.\nUsage:", sys.argv[0], "<file name>")
-        quit()
-    try:
-        file = open(file_name)
-        data = collect_data(file)
-        print(data)
-        draw_sankey(data)
-        file.close()
-    except FileNotFoundError:
-        print("Error: A file with that name does not exist.")
-    except IOError:
-        print("Error: An error occurred while opening the file.")
 
 
 if __name__ == '__main__':
