@@ -51,7 +51,7 @@ def draw_sankey(data):
 
     # Draw the title
     setFont("Calibri", "20")
-    text(WIDTH / 2, 50, data["Title"])
+    text(WIDTH / 2, 35, data["Title"])
     # Draw the source bar text
     setFont("Calibri")
     text(PADDING_X, HEIGHT / 2, data["Source"][0], "e")
@@ -132,7 +132,6 @@ def main():
     # Get file name from command line arguments if one exists, otherwise ask the user for the file name directly
     file_name = sys.argv[1] if len(sys.argv) == 2\
         else input("Enter the name of the file: ") if len(sys.argv) == 1 else None
-
     if file_name:
         try:
             file = open(file_name)

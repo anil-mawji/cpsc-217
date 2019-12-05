@@ -913,7 +913,7 @@ def main():
                 # AI off
                 if 'p1_queue' in locals() and len(p1_queue) > 0:
                     extended_p1_queue += p1_queue + [p1_queue[-2] + cos(p1_heading) * speed * 0.6,
-                                                    p1_queue[-1] + sin(p1_heading) * speed * 0.6]
+                                                     p1_queue[-1] + sin(p1_heading) * speed * 0.6]
 
                 angle = e_headings[i] - 0.6 * pi
                 found = False
